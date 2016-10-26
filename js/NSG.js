@@ -15,7 +15,11 @@ function preload() {
 
 function create() {
     //  Will create objects for the game
-    background_spr = game.add.sprite(GAMEWIDTH/2, GAMEHEIGHT/2, 'background_img');
+    var p = player;
+    p.posX = GAMEWIDTH/2;
+    p.posY = GAMEHEIGHT/2;
+
+    background_spr = game.add.sprite(p.posX, p.posY, 'background_img');
     background_spr.anchor.setTo(0.5, 0.5);
 } // create()
 
