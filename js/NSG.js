@@ -18,7 +18,7 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'NSG', {
 
 function preload() {
     // Load in images/xml/audio
-    game.load.image('player', 'assets/phaser.png');
+    game.load.image('player', 'assets/images/phaser.png');
 } //preload();
 
 function create() {
@@ -43,5 +43,21 @@ function update() {
         for(i = 0; i < enemy.length; i++) {
             enemyUpdate(enemy[i]);
         }
+        game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, GAMEHEIGHT-20);
     }
 } // update()
+
+function sortTimer(time)
+{
+    var mins = 0;
+    var secs;
+
+    if (Math.round(time) >= 60) {
+        mins = Math.round(time)/60;
+    }
+    secs = Math.round(time) - (mins*60);
+    if (secs < 10) {
+        secs = "0" + secs;
+    }
+    return mins + ":" + secs;
+}
