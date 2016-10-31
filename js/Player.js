@@ -11,6 +11,10 @@ function playerInput(player) {
         console.log("Pressed Right");
         player.x = player.x + speed;
     }
+    if (spaceBar.isDown)
+    {
+        yell.play();
+    }
 }
 
 function playerUpdate() {

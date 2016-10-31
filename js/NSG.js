@@ -10,6 +10,8 @@ var speed = 1;
 var player;
 var enemy = [];
 
+var yell;
+
 var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'NSG', {
     preload: preload,
     create: create,
@@ -19,6 +21,8 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'NSG', {
 function preload() {
     // Load in images/xml/audio
     game.load.image('player', 'assets/images/phaser.png');
+    // Audio
+    game.load.audio('yell', 'assets/sounds/yell_hey.wav');
 } //preload();
 
 function create() {
@@ -32,6 +36,8 @@ function create() {
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+    yell = game.add.audio('yell');
 } // create()
 
 function update() {
