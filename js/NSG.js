@@ -12,6 +12,23 @@ var enemy = [];
 
 var yell;
 
+var gameState;
+var gameStates = {
+    MENU: 0,
+    LOAD: 1,
+    PLAY: 2
+};
+
+var playerStates = {
+    DARK: 0,
+    LIGHT: 1
+};
+
+var enemyStates = {
+    PATROL: 0,
+    CHASE: 1
+};
+
 var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'NSG', {
     preload: preload,
     create: create,
@@ -27,11 +44,15 @@ function preload() {
 
 function create() {
     //  Will create objects for the game
+    gameState = gameStates.MENU;
+
     player = game.add.sprite(GAMEHEIGHT/2, GAMEWIDTH/2, 'player');
     player.anchor.setTo(0.5, 0.5);
+    player.state = playerStates.DARK;
 
     enemy[0] = game.add.sprite(0,0, 'player');
     enemy[0].anchor.setTo(0.5, 0,5);
+    enemy[0].state = enemyStates.PATROL;
 
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
