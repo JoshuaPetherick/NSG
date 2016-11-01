@@ -1,7 +1,7 @@
 
 function enemyInit(x, y) {
-    var enemy = game.add.sprite(x, y, 'player');
-    enemy.anchor.setTo(0.5, 0,5);
+    var enemy = game.add.sprite(x, y, 'enemy');
+    enemy.anchor.setTo(0, 0);
     enemy.state = enemyStates.PATROL;
 
     enemy.origX = x;
@@ -10,7 +10,7 @@ function enemyInit(x, y) {
 }
 
 function enemyUpdate(enemy) {
-    var speed = 2;
+    var speed = 3;
     // Do stuff (Re-act?)
     enemy.x = enemy.x + speed;
     if (enemy.x >= GAMEWIDTH)

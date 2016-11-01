@@ -17,9 +17,9 @@ var spaceBar;
 // Sprite Variables
 var player;
 var enemies = []; // Array of Enemies
-var floor = []; // Array of Floors
-var ladder = []; // Array of Ladders
-var bulb = []; // Array of Bulbs
+var floors = []; // Array of Floors
+var stairs = []; // Array of Ladders
+var lights = []; // Array of Bulbs
 
 // Audio Variables
 var yell;
@@ -50,7 +50,11 @@ function preload() {
     // Start state
     gameState = gameStates.PLAY;
     // Load in images/xml
-    game.load.image('player', 'assets/images/phaser.png');
+    game.load.image('player', 'assets/images/player.png');
+    game.load.image('enemy', 'assets/images/enemy.png');
+    game.load.image('floor', 'assets/images/floor.png');
+    game.load.image('light', 'assets/images/light.png');
+    game.load.image('stairs', 'assets/images/stairs.png');
     // Audio
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
     // Text
@@ -71,20 +75,34 @@ function create() {
 
         case gameStates.PLAY:
             var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
+            var distY = Math.floor(GAMEWIDTH/text.length);
+            var distX = Math.floor(GAMEHEIGHT/text[0].length);
 
             // For each Line in Text  -  Determines X
             for(i = 0; i < text.length; i++) {
-                //      For each Character in Line  -  Determines Y
+                // For each Character in Line  -  Determines Y
                 for(j = 0; j < text[i].length; j++) {
                     // Initialise based on character in txt file
                     switch(text[i].charAt(j))
                     {
                         case "P":
-                            playerInit(GAMEHEIGHT/2, GAMEWIDTH/2);
+                            playerInit((distY*j), (distX*i));
                             break;
 
                         case "G":
-                            enemies.push(enemyInit(10, 10)); // Add new to Array
+                            enemies.push(enemyInit((distY*j), (distX*i))); // Add new to Array
+                            break;
+
+                        case "F":
+                            floors.push(floorInit((distY*j), (distX*i))); // Add new to Array
+                            break;
+
+                        case "S":
+                            stairs.push(stairInit((distY*j), (distX*i))); // Add new to Array
+                            break;
+
+                        case "L":
+                            lights.push(lightInit((distY*j), (distX*i))); // Add new to Array
                             break;
                     }
                 }
@@ -118,7 +136,7 @@ function update() {
                 playerInput(player);
                 playerUpdate();
                 for(i = 0; i < enemies.length; i++) {
-                    enemyUpdate(enemies[i]);
+                    //enemyUpdate(enemies[i]);
                 }
                 game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, GAMEHEIGHT-20);
                 break;
