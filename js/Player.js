@@ -1,5 +1,13 @@
 
+function playerInit() {
+    player = game.add.sprite(GAMEHEIGHT/2, GAMEWIDTH/2, 'player');
+    player.anchor.setTo(0.5, 0.5);
+    player.state = playerStates.DARK;
+}
+
 function playerInput(player) {
+    var speed = 1;
+
     //Pass across key pressed
     if (leftKey.isDown)
     {
