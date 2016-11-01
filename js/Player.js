@@ -1,7 +1,10 @@
 
-function playerInit() {
-    player = game.add.sprite(GAMEHEIGHT/2, GAMEWIDTH/2, 'player');
+function playerInit(x, y) {
+    player = game.add.sprite(x, y, 'player');
     player.anchor.setTo(0.5, 0.5);
+
+    player.origX = x;
+    player.origY = y;
     player.state = playerStates.DARK;
 }
 

@@ -1,9 +1,11 @@
 
-function enemyInit() {
-    var enemy = game.add.sprite(0,0, 'player');
+function enemyInit(x, y) {
+    var enemy = game.add.sprite(x, y, 'player');
     enemy.anchor.setTo(0.5, 0,5);
     enemy.state = enemyStates.PATROL;
 
+    enemy.origX = x;
+    enemy.origY = y;
     return enemy;
 }
 

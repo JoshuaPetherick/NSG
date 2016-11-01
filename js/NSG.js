@@ -1,6 +1,5 @@
 //--- Still to investigate --- \\
 // - Scaling images down/up to window size
-// - Reading text from txt files
 // - Menu buttons (Similar code to making an on-screen movement arrow)
 // --------------------------- \\
 
@@ -8,6 +7,7 @@
 var GAMEHEIGHT = 600;
 var GAMEWIDTH = 800;
 var playing_bool = true;
+var level = 1;
 
 // Input variables
 var leftKey;
@@ -17,6 +17,9 @@ var spaceBar;
 // Sprite Variables
 var player;
 var enemies = []; // Array of Enemies
+var floor = []; // Array of Floors
+var ladder = []; // Array of Ladders
+var bulb = []; // Array of Bulbs
 
 // Audio Variables
 var yell;
@@ -50,6 +53,8 @@ function preload() {
     game.load.image('player', 'assets/images/phaser.png');
     // Audio
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
+    // Text
+    game.load.text('level1', 'assets/levels/lvl1.txt');
 } //preload();
 
 function create() {
@@ -65,17 +70,33 @@ function create() {
             break;
 
         case gameStates.PLAY:
-            // Init player and enemies
-            playerInit();
-            enemies[0] = enemyInit();
+            var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
 
-            leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-            rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-            spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            // For each Line in Text  -  Determines X
+            for(i = 0; i < text.length; i++) {
+                //      For each Character in Line  -  Determines Y
+                for(j = 0; j < text[i].length; j++) {
+                    // Initialise based on character in txt file
+                    switch(text[i].charAt(j))
+                    {
+                        case "P":
+                            playerInit(GAMEHEIGHT/2, GAMEWIDTH/2);
+                            break;
 
-            yell = game.add.audio('yell');
-            break;
-    }
+                        case "G":
+                            enemies.push(enemyInit(10, 10)); // Add new to Array
+                            break;
+                    }
+                }
+            }
+                leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+                rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+                spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+                yell = game.add.audio('yell');
+
+                break;
+            }
 } // create()
 
 function update() {
@@ -86,6 +107,11 @@ function update() {
         {
             case gameStates.MENU:
                 // Check and update based on Menu choices!
+                break;
+
+            case gameStates.LOAD:
+                gameState = gameStates.PLAY;
+                create();
                 break;
 
             case gameStates.PLAY:
@@ -103,11 +129,10 @@ function update() {
 function sortTimer(time) {
     var mins = 0;
     var secs;
-
     if (Math.round(time) >= 60) {
-        mins = Math.round(time)/60;
+        mins = Math.floor(time/60);
     }
-    secs = Math.round(time) - (mins*60);
+    secs = Math.floor(time) - (mins*60);
     if (secs < 10) {
         secs = "0" + secs;
     }
