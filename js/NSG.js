@@ -7,7 +7,7 @@
 var GAMEHEIGHT = 600;
 var GAMEWIDTH = 800;
 var playing_bool = true;
-var level = 1;
+var level = 2;
 
 // Input variables
 var leftKey;
@@ -33,7 +33,8 @@ var gameStates = {
 };
 var playerStates = {
     DARK: 0,
-    LIGHT: 1
+    LIGHT: 1,
+    FALLING: 2
 };
 var enemyStates = {
     PATROL: 0,
@@ -59,6 +60,7 @@ function preload() {
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
     // Text
     game.load.text('level1', 'assets/levels/lvl1.txt');
+    game.load.text('level2', 'assets/levels/lvl2.txt');
 } //preload();
 
 function create() {
@@ -75,34 +77,34 @@ function create() {
 
         case gameStates.PLAY:
             var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
-            var distY = Math.floor(GAMEWIDTH/text.length);
-            var distX = Math.floor(GAMEHEIGHT/text[0].length);
+            var distY = Math.round(GAMEHEIGHT/text.length);
+            var distX = Math.round(GAMEWIDTH/(text[0].length-1));
 
-            // For each Line in Text  -  Determines X
+            // For each Line in Text  -  Determines Y
             for(i = 0; i < text.length; i++) {
-                // For each Character in Line  -  Determines Y
+                // For each Character in Line  -  Determines X
                 for(j = 0; j < text[i].length; j++) {
                     // Initialise based on character in txt file
                     switch(text[i].charAt(j))
                     {
                         case "P":
-                            playerInit((distY*j), (distX*i));
+                            playerInit((distX*j), (distY*i), distY, (distX/2));
                             break;
 
                         case "G":
-                            enemies.push(enemyInit((distY*j), (distX*i))); // Add new to Array
+                            enemies.push(enemyInit((distX*j), (distY*i), distY, (distX/2))); // Add new to Array
                             break;
 
                         case "F":
-                            floors.push(floorInit((distY*j), (distX*i))); // Add new to Array
+                            floors.push(floorInit((distX*j), (distY*i), distY, distX)); // Add new to Array
                             break;
 
                         case "S":
-                            stairs.push(stairInit((distY*j), (distX*i))); // Add new to Array
+                            stairs.push(stairInit((distX*j), (distY*i), distY, distX)); // Add new to Array
                             break;
 
                         case "L":
-                            lights.push(lightInit((distY*j), (distX*i))); // Add new to Array
+                            lights.push(lightInit((distX*j), (distY*i))); // Add new to Array
                             break;
                     }
                 }
@@ -155,4 +157,10 @@ function sortTimer(time) {
         secs = "0" + secs;
     }
     return mins + ":" + secs;
+}
+
+function checkColliding(obj1, obj2) {
+    var boundsA = obj1.getBounds();
+    var boundsB = obj2.getBounds();
+    return Phaser.Rectangle.intersects(boundsA, boundsB);
 }
