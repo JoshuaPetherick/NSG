@@ -7,11 +7,17 @@
 var GAMEHEIGHT = 600;
 var GAMEWIDTH = 800;
 var playing_bool = true;
-var level = 2;
+var level = 1;
+
+// Phaser draw groups
+var background;
+var foreground;
 
 // Input variables
 var leftKey;
 var rightKey;
+var upKey;
+var downKey;
 var spaceBar;
 
 // Sprite Variables
@@ -80,6 +86,9 @@ function create() {
             var distY = Math.round(GAMEHEIGHT/text.length);
             var distX = Math.round(GAMEWIDTH/(text[0].length-1));
 
+            background = game.add.group();
+            foreground = game.add.group();
+
             // For each Line in Text  -  Determines Y
             for(i = 0; i < text.length; i++) {
                 // For each Character in Line  -  Determines X
@@ -109,14 +118,15 @@ function create() {
                     }
                 }
             }
-                leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-                rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-                spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+            rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+            upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+            downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+            spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
-                yell = game.add.audio('yell');
-
-                break;
-            }
+            yell = game.add.audio('yell');
+            break;
+    }
 } // create()
 
 function update() {
@@ -138,7 +148,7 @@ function update() {
                 playerInput(player);
                 playerUpdate();
                 for(i = 0; i < enemies.length; i++) {
-                    //enemyUpdate(enemies[i]);
+                    enemyUpdate(enemies[i]);
                 }
                 game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, GAMEHEIGHT-20);
                 break;
@@ -163,4 +173,13 @@ function checkColliding(obj1, obj2) {
     var boundsA = obj1.getBounds();
     var boundsB = obj2.getBounds();
     return Phaser.Rectangle.intersects(boundsA, boundsB);
+}
+
+function resetLevel() {
+    player.x = player.origX;
+    player.y = player.origY;
+    for(i = 0; i < enemies.length; i++) {
+        enemies[i].x = enemies[i].origX;
+        enemies[i].y = enemies[i].origY;
+    }
 }

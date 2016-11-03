@@ -6,6 +6,8 @@ function floorInit(x, y, h, w) {
 
     floor.height = h;
     floor.width = w;
+
+    background.add(floor);
     return floor;
 }
 

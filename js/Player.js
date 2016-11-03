@@ -7,66 +7,72 @@ function playerInit(x, y, h, w) {
     player.origY = y;
     player.height = h;
     player.width = w;
+
     player.state = playerStates.DARK;
+    foreground.add(player);
 }
 
 function playerInput(player) {
-    var speed = 2;
+    var speed = 1 + Math.floor(GAMEWIDTH/400);
 
     //Handle Left
     if (leftKey.isDown) {
-        console.log("Pressed Left: " + player.x);
+        //console.log("Pressed Left: " + player.x);
         player.x = player.x - speed;
         if (player.x <= 0) { // Check not going off the screen!
             player.x = player.x + speed;
         }
         else if (player.state != playerStates.FALLING) { // Make sure still on a platform
-            if( playerCheckCollision()) {
+            if( playerCheckCollision(floors) == false && playerCheckCollision(stairs) == false) {
                 player.state = playerStates.FALLING;
             }
         }
     }
     // Handle Right
     if (rightKey.isDown) {
-        console.log("Pressed Right: " + player.x);
+        //console.log("Pressed Right: " + player.x);
         player.x = player.x + speed;
         if (player.x >= GAMEWIDTH) { // Check not going off the screen!
             player.x = player.x - speed;
         }
         else if (player.state != playerStates.FALLING) { // Make sure still on a platform
-            if (playerCheckCollision()) {
+            if (playerCheckCollision(floors) == false && playerCheckCollision(stairs) == false) {
                 player.state = playerStates.FALLING;
             }
         }
     }
-    // Handling jumping
-    if (player.state == playerStates.FALLING) {
-        player.y = player.y + (speed*2);
-        if (playerCheckCollision() == false) {
-            player.state = playerStates.DARK;
+    // Handle Up
+    if (upKey.isDown) {
+        if (playerCheckCollision(stairs)) {
+            player.y = player.y - speed;
         }
     }
-    else if (spaceBar.isDown) {
-        console.log(player.getBounds());
-        console.log(floors[0].getBounds());
+    // Handle Down
+    if (downKey.isDown) {
+        if (playerCheckCollision(stairs) && playerCheckCollision(floors) == false) {
+            player.y = player.y + speed;
+        }
+    }
+    // Handling jumping
+    if (spaceBar.isDown && player.state != playerStates.FALLING) {
         yell.play();
     }
 }
 
 function playerUpdate() {
-    //Do something;
+    if (player.state == playerStates.FALLING) {
+        player.y = player.y + Math.floor(GAMEHEIGHT/200);
+        if (playerCheckCollision(floors) || playerCheckCollision(stairs)) {
+            player.state = playerStates.DARK;
+        }
+    }
 }
 
-function playerCheckCollision() {
-    for(i = 0; i < floors.length; i++) {
-        if (checkColliding(player, floors[i]) == true) {
-            return false; // If colliding then no longer need to check!
+function playerCheckCollision(array) {
+    for(i = 0; i < array.length; i++) {
+        if (checkColliding(player, array[i]) == true) {
+            return true; // If colliding then no longer need to check!
         }
     }
-    for(i = 0; i < stairs.length; i++) {
-        if (checkColliding(player, stairs[i]) == true) {
-            return false; // If colliding then no longer need to check!
-        }
-    }
-    return true; // Not colliding...
+    return false; // Not colliding...
 }

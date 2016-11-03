@@ -8,14 +8,21 @@ function enemyInit(x, y, h, w) {
     enemy.origY = y;
     enemy.height = h;
     enemy.width = w;
+
+    foreground.add(enemy);
     return enemy;
 }
 
 function enemyUpdate(enemy) {
-    var speed = 3;
-    // Do stuff (Re-act?)
-    enemy.x = enemy.x + speed;
-    if (enemy.x >= GAMEWIDTH) {
-        enemy.x = enemy.x - speed;
+    var speed = 2 + Math.floor(GAMEWIDTH/400);
+
+    // Check if colliding with player!
+    if (checkColliding(player, enemy)) {
+        resetLevel();
     }
+
+    //enemy.x = enemy.x - speed;
+    //if (enemy.x <= 0) {
+    //    enemy.x = enemy.x + speed;
+    //}
 }
