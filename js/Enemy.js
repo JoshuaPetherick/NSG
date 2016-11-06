@@ -14,7 +14,7 @@ function enemyInit(x, y, h, w) {
 }
 
 function enemyUpdate(enemy) {
-    var speed = 2 + Math.floor(GAMEWIDTH/400);
+    var speed = 2 + Math.floor(GAMEWIDTH/800);
 
     // Check if colliding with player!
     if (checkColliding(player, enemy)) {

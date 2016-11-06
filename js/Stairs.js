@@ -7,7 +7,7 @@ function stairInit(x, y, h, w) {
     stair.height = h;
     stair.width = w;
 
-    background.add(stair);
+    midground.add(stair);
     return stair;
 }
 

@@ -13,7 +13,7 @@ function playerInit(x, y, h, w) {
 }
 
 function playerInput(player) {
-    var speed = 1 + Math.floor(GAMEWIDTH/400);
+    var speed = 1 + Math.floor(GAMEWIDTH/800);
 
     //Handle Left
     if (leftKey.isDown) {
