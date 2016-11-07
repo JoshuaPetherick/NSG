@@ -1,0 +1,11 @@
+All levels must follow a 11x12 (11 down, 12 across) style. 
+
+Key:
+P = player start
+G = guard start
+F = floor
+S = stairs/ladder
+L = light
+X = light & guard start
+Y = light & player start
+- = empty space
