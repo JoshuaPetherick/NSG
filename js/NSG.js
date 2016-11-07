@@ -132,7 +132,7 @@ function update() {
 function loadLevel() {
     var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
     var distY = Math.round(GAMEHEIGHT/text.length);
-    var distX = Math.round(GAMEWIDTH/(text[0].length-1)); // Minus 1 as it stores linebreaks as another character :S
+    var distX = Math.round(GAMEWIDTH/(text[0].length));
 
     // For each Line in Text  -  Determines Y
     for(i = 0; i < text.length; i++) {
