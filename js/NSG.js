@@ -34,6 +34,10 @@ var stairs = []; // Array of Ladders
 var lights = []; // Array of Bulbs
 var exit;
 
+// Game Variables
+var playerSpeed = 2;
+var enemySpeed = 3;
+
 // Audio Variables
 var backgroundMusic;
 var yell;
@@ -71,6 +75,12 @@ function preload() {
     game.load.image('light', 'assets/images/light.png');
     game.load.image('stairs', 'assets/images/stairs.png');
     game.load.image('exit', 'assets/images/exit.png');
+
+    game.load.image('leftArrow', 'assets/images/ArrowLeft.png');
+    game.load.image('rightArrow', 'assets/images/ArrowRight.png');
+    game.load.image('downArrow', 'assets/images/ArrowDown.png');
+    game.load.image('upArrow', 'assets/images/ArrowUp.png');
+    game.load.image('spaceBar', 'assets/images/SpaceBar.png');
     // Audio
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
     game.load.audio('background1', 'assets/sounds/background_eerie.mp3');
@@ -93,12 +103,7 @@ function create() {
             foreground = game.add.group();
 
             loadLevel();
-
-            leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-            rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-            upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
-            downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-            spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            inputInit();
 
             yell = game.add.audio('yell');
             musicInit('background1');
@@ -123,7 +128,15 @@ function update() {
                     enemyUpdate(enemies[i]);
                 }
                 exitUpdate();
-                game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, GAMEHEIGHT-20);
+                game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, 25);
+                if (game.input.currentPointers == 0 && !game.input.activePointer.isMouse) {
+                    // On screen keys can sometime get stuck, this IF fixes that issue
+                    leftKey = false;
+                    rightKey = false;
+                    upKey = false;
+                    downKey = false;
+                    spaceBar = false;
+                }
                 break;
         }
     }
@@ -132,7 +145,7 @@ function update() {
 function loadLevel() {
     var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
     var distY = Math.round(GAMEHEIGHT/text.length);
-    var distX = Math.round(GAMEWIDTH/(text[0].length)); // Minus 1 as it stores linebreaks as another character :S
+    var distX = Math.round(GAMEWIDTH/(text[0].length));
 
     // For each Line in Text  -  Determines Y
     for(i = 0; i < text.length; i++) {
