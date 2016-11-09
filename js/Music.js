@@ -14,6 +14,7 @@ function musicUpdate() {
 }
 
 function musicPlay() {
+    backgroundMusic.play();
     backgroundMusic.loopFull();
 }
 
