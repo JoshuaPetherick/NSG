@@ -5,7 +5,7 @@
 function musicInit(song) {
     // Init
     backgroundMusic = game.add.audio(song);
-    musicVol(0.2); // To make music more eerie, reduce volume by 80%
+    //musicVol(1); // No longer need to reduce volume
     musicPlay();
 }
 
