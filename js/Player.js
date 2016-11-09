@@ -8,6 +8,7 @@ function playerInit(x, y, h, w) {
     player.height = h;
     player.width = w;
 
+    player.speed = 2;
     player.state = playerStates.DARK;
     foreground.add(player);
 }
@@ -45,9 +46,9 @@ function inputInit() {
 }
 
 function moveLeft() {
-    player.x = player.x - playerSpeed;
+    player.x = player.x - player.speed;
     if (player.x <= 0) { // Check not going off the screen!
-        player.x = player.x + playerSpeed;
+        player.x = player.x + player.speed;
     }
     else if (player.state != playerStates.FALLING) { // Make sure still on a platform
         if( playerCheckCollision(floors) == false && playerCheckCollision(stairs) == false) {
@@ -57,9 +58,9 @@ function moveLeft() {
 }
 
 function moveRight() {
-    player.x = player.x + playerSpeed;
+    player.x = player.x + player.speed;
     if (player.x >= GAMEWIDTH) { // Check not going off the screen!
-        player.x = player.x - playerSpeed;
+        player.x = player.x - player.speed;
     }
     else if (player.state != playerStates.FALLING) { // Make sure still on a platform
         if (playerCheckCollision(floors) == false && playerCheckCollision(stairs) == false) {
@@ -70,13 +71,13 @@ function moveRight() {
 
 function moveUp() {
     if (playerCheckCollision(stairs)) {
-        player.y = player.y - playerSpeed;
+        player.y = player.y - player.speed;
     }
 }
 
 function moveDown() {
     if (playerCheckCollision(stairs)) {
-        player.y = player.y + playerSpeed;
+        player.y = player.y + player.speed;
     }
 }
 

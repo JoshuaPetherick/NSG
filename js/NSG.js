@@ -34,10 +34,6 @@ var stairs = []; // Array of Ladders
 var lights = []; // Array of Bulbs
 var exit;
 
-// Game Variables
-var playerSpeed = 2;
-var enemySpeed = 3;
-
 // Audio Variables
 var backgroundMusic;
 var yell;

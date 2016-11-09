@@ -9,20 +9,20 @@ function enemyInit(x, y, h, w) {
     enemy.height = h;
     enemy.width = w;
 
+    enemy.speed = 3;
     foreground.add(enemy);
     return enemy;
 }
 
 function enemyUpdate(enemy) {
-    var speed = 2;
-
     // Check if colliding with player!
     if (checkColliding(player, enemy)) {
         resetLevel();
     }
 
-    //enemy.x = enemy.x - speed;
+    // Code to patrol - methodise this
+    //enemy.x = enemy.x - enemy.speed;
     //if (enemy.x <= 0) {
-    //    enemy.x = enemy.x + speed;
+    //    enemy.x = enemy.x + enemy.speed;
     //}
 }
