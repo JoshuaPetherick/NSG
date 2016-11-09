@@ -26,16 +26,22 @@ function inputInit() {
     rightButton.events.onInputUp.add(function(){rightKey = false});
 
     var upButton = game.add.button(GAMEWIDTH-110, GAMEHEIGHT-50, 'upArrow', null, this, 0, 1, 0, 1);
-    //upButton.events.onInputOver.add();
-    //upButton.events.onInputDown.add();
+    upButton.events.onInputOver.add(function(){upKey = true;});
+    upButton.events.onInputOut.add(function(){upKey= false});
+    upButton.events.onInputDown.add(function(){upKey = true});
+    upButton.events.onInputUp.add(function(){upKey = false});
 
     var downButton = game.add.button(70, GAMEHEIGHT-50, 'downArrow', null, this, 0, 1, 0, 1);
-    //downButton.events.onInputOver.add();
-    //downButton.events.onInputDown.add();
+    downButton.events.onInputOver.add(function(){downKey = true;});
+    downButton.events.onInputOut.add(function(){downKey = false});
+    downButton.events.onInputDown.add(function(){downKey = true});
+    downButton.events.onInputUp.add(function(){downKey = false});
 
     var spaceButton = game.add.button((GAMEWIDTH/2)-50, GAMEHEIGHT-40, 'spaceBar', null, this, 0, 1, 0, 1);
-    //spaceButton.events.onInputOver.add();
-    //spaceButton.events.onInputDown.add();
+    spaceButton.events.onInputOver.add(function(){spaceBar = true;});
+    spaceButton.events.onInputOut.add(function(){spaceBar = false});
+    spaceButton.events.onInputDown.add(function(){spaceBar = true});
+    spaceButton.events.onInputUp.add(function(){spaceBar = false});
 }
 
 function moveLeft() {
@@ -62,6 +68,24 @@ function moveRight() {
     }
 }
 
+function moveUp() {
+    if (playerCheckCollision(stairs)) {
+        player.y = player.y - playerSpeed;
+    }
+}
+
+function moveDown() {
+    if (playerCheckCollision(stairs)) {
+        player.y = player.y + playerSpeed;
+    }
+}
+
+function playerJump() {
+    if (player.state != playerStates.FALLING) {
+        yell.play();
+    }
+}
+
 function playerInput(player) {
 
     if (leftKey == true) {
@@ -71,30 +95,14 @@ function playerInput(player) {
         moveRight();
     }
     if (downKey == true) {
-
+        moveDown();
     }
     if (upKey == true) {
-
+        moveUp();
     }
     if (spaceBar == true) {
-
+        playerJump();
     }
-    // Handle Up
-    // if (upKey.isDown) {
-    //     if (playerCheckCollision(stairs)) {
-    //         player.y = player.y - speed;
-    //     }
-    // }
-    // // Handle Down
-    // if (downKey.isDown) {
-    //     if (playerCheckCollision(stairs) && playerCheckCollision(floors) == false) {
-    //         player.y = player.y + speed;
-    //     }
-    // }
-    // // Handling jumping
-    // if (spaceBar.isDown && player.state != playerStates.FALLING) {
-    //     yell.play();
-    // }
 }
 
 function playerUpdate() {

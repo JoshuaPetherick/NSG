@@ -129,7 +129,14 @@ function update() {
                 }
                 exitUpdate();
                 game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, 25);
-                if (game.input.currentPointers == 0 && !game.input.activePointer.isMouse) {};
+                if (game.input.currentPointers == 0 && !game.input.activePointer.isMouse) {
+                    // On screen keys can sometime get stuck, this IF fixes that issue
+                    leftKey = false;
+                    rightKey = false;
+                    upKey = false;
+                    downKey = false;
+                    spaceBar = false;
+                }
                 break;
         }
     }
@@ -138,7 +145,7 @@ function update() {
 function loadLevel() {
     var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
     var distY = Math.round(GAMEHEIGHT/text.length);
-    var distX = Math.round(GAMEWIDTH/(text[0].length-1));
+    var distX = Math.round(GAMEWIDTH/(text[0].length));
 
     // For each Line in Text  -  Determines Y
     for(i = 0; i < text.length; i++) {
