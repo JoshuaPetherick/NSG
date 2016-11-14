@@ -1,10 +1,10 @@
 
 function lightInit(x, y) {
     // Init
-    var light = game.add.sprite(x, y, 'light');
-    light.anchor.setTo(0.5, 0);
+    var light = background.create(x, y, 'light');
+    //light.x = light.x + (light.width/2);
 
-    background.add(light);
+    world.putTile(0, layer.getTileX(x), layer.getTileY(y), layer);
     return light;
 }
 

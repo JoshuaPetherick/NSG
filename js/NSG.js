@@ -12,12 +12,17 @@
 var GAMEHEIGHT = 600;
 var GAMEWIDTH = 800;
 var playing_bool = true;
-var level = 1;
+var level = 3;
 
 // Phaser draw groups
+var layer;
 var background;
 var midground;
 var foreground;
+
+// Tile Info
+var TileSizeX = 50;
+var TileSizeY = 50;
 
 // Input variables
 var leftKey;
@@ -27,16 +32,13 @@ var downKey;
 var spaceBar;
 
 // Sprite Variables
+var world;
 var player;
 var enemies = []; // Array of Enemies
 var floors = []; // Array of Floors
 var stairs = []; // Array of Ladders
 var lights = []; // Array of Bulbs
 var exit;
-
-// Audio Variables
-var backgroundMusic;
-var yell;
 
 // State variables
 var gameState;
@@ -83,6 +85,14 @@ function preload() {
     // Text
     game.load.text('level1', 'assets/levels/lvl1.txt');
     game.load.text('level2', 'assets/levels/lvl2.txt');
+    game.load.text('level3', 'assets/levels/lvl3.txt');
+    game.load.text('level4', 'assets/levels/lvl4.txt');
+    game.load.text('level5', 'assets/levels/lvl5.txt');
+    game.load.text('level6', 'assets/levels/lvl6.txt');
+    game.load.text('level7', 'assets/levels/lvl7.txt');
+    game.load.text('level8', 'assets/levels/lvl8.txt');
+    game.load.text('level9', 'assets/levels/lvl9.txt');
+    game.load.text('level10', 'assets/levels/lvl10.txt');
 } //preload();
 
 function create() {
@@ -94,15 +104,29 @@ function create() {
             break;
 
         case gameStates.PLAY:
+            var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
+            for(i = 0; i < text.length; i++) {
+                text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
+            }
+            TileSizeY = Math.round(GAMEHEIGHT/text.length);
+            TileSizeX = Math.round(GAMEWIDTH/(text[0].length)); // Minus 1 during debug
+
+            world = game.add.tilemap();
+            layer = world.createBlankLayer('level', (GAMEWIDTH/TileSizeY), (GAMEHEIGHT/TileSizeX), TileSizeX, TileSizeY); // Create Blank
+            layer.resizeWorld();
+
+            world.addTilesetImage('floor');
+            world.addTilesetImage('stairs');
+            
             background = game.add.group();
-            midground = game.add.group();
-            foreground = game.add.group();
+            //midground = game.add.group();
+            //foreground = game.add.group();
 
-            loadLevel();
-            inputInit();
+            loadLevel(text);
+            //inputInit();
 
-            yell = game.add.audio('yell');
-            musicInit('background1');
+            //yell = game.add.audio('yell');
+            //musicInit('background1');
             break;
     }
 } // create()
@@ -118,12 +142,12 @@ function update() {
                 break;
 
             case gameStates.PLAY:
-                playerInput(player);
-                playerUpdate();
+                //playerInput(player);
+                //playerUpdate();
                 for(i = 0; i < enemies.length; i++) {
-                    enemyUpdate(enemies[i]);
+                    //enemyUpdate(enemies[i]);
                 }
-                exitUpdate();
+                //exitUpdate();
                 game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, 25);
                 if (game.input.currentPointers == 0 && !game.input.activePointer.isMouse) {
                     // On screen keys can sometime get stuck, this IF fixes that issue
@@ -138,45 +162,59 @@ function update() {
     }
 } // update()
 
-function loadLevel() {
-    var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
-    var distY = Math.round(GAMEHEIGHT/text.length);
-    var distX = Math.round(GAMEWIDTH/(text[0].length));
+function loadLevel(text) {
+    var tileSelectorBackground = game.make.graphics();
+    tileSelectorBackground.beginFill(0x000000, 0.5);
+    tileSelectorBackground.drawRect(0, 0, 800, 34);
+    tileSelectorBackground.endFill();
+
+    background.add(tileSelectorBackground);
 
     // For each Line in Text  -  Determines Y
-    for(i = 0; i < text.length; i++) {
+    for (i = 0; i < text.length; i++) {
         // For each Character in Line  -  Determines X
-        for(j = 0; j < text[i].length; j++) {
+        for (j = 0; j < text[i].length; j++) {
             // Initialise based on character in txt file
-            switch(text[i].charAt(j))
-            {
+            switch (text[i].charAt(j)) {
+                // Optimise the below: Maybe merge into a function (Reads file and returns x&y position)
+
                 case "P":
-                    playerInit((distX*j), (distY*i), distY, (distX/2));
+                    playerInit((j*TileSizeX), (i*TileSizeY), (TileSizeX/2), TileSizeY);
                     break;
 
                 case "G":
-                    enemies.push(enemyInit((distX*j), (distY*i), distY, (distX/2))); // Add new to Array
+                    enemies.push(enemyInit((j*TileSizeX), (i*TileSizeY), (TileSizeX/2), TileSizeY)); // Add new to Array
                     break;
 
                 case "F":
-                    floors.push(floorInit((distX*j), (distY*i), distY, distX)); // Add new to Array
+                    floors.push(floorInit((j*TileSizeX), (i*TileSizeY), TileSizeX, TileSizeY)); // Add new to Array
                     break;
 
                 case "S":
-                    stairs.push(stairInit((distX*j), (distY*i), distY, distX)); // Add new to Array
+                    stairs.push(stairInit((j*TileSizeX), (i*TileSizeY), TileSizeX, TileSizeY)); // Add new to Array
                     break;
 
                 case "L":
-                    lights.push(lightInit((distX*j), (distY*i))); // Add new to Array
+                    lights.push(lightInit((j*TileSizeX), (i*TileSizeY))); // Add new to Array
                     break;
 
                 case "X":
-                    enemies.push(enemyInit((distX*j), (distY*i), distY, (distX/2)));  // Add new to Array
-                    lights.push(lightInit((distX*j), (distY*i)));  // Add new to Array
+                    enemies.push(enemyInit((j*TileSizeX), (i*TileSizeY), (TileSizeX/2), TileSizeY)); // Add new to Array
+                    lights.push(lightInit((j*TileSizeX), (i*TileSizeY))); // Add new to Array
+                    break;
+
+                case "Y":
+                    playerInit((j*TileSizeX), (i*TileSizeY), (TileSizeX/2), TileSizeY);
+                    stairs.push(stairInit((j*TileSizeX), (i*TileSizeY), TileSizeX, TileSizeY)); // Add new to Array
+                    break;
+
+                case "Z":
+                    playerInit((j*TileSizeX), (i*TileSizeY), (TileSizeX/2), TileSizeY);
+                    lights.push(lightInit((j*TileSizeX), (i*TileSizeY))); // Add new to Array
                     break;
 
                 case "E":
-                    exitInit((distX*j), (distY*i), distY, (distX/2));
+                    exitInit((j*TileSizeX), (i*TileSizeY), (TileSizeX/2), TileSizeY);
                     break;
             }
         }
@@ -197,9 +235,10 @@ function sortTimer(time) {
 }
 
 function checkColliding(obj1, obj2) {
-    var boundsA = obj1.getBounds();
-    var boundsB = obj2.getBounds();
-    return Phaser.Rectangle.intersects(boundsA, boundsB);
+    //var boundsA = obj1.getBounds();
+    //var boundsB = obj2.getBounds();
+    //return Phaser.Rectangle.intersects(boundsA, boundsB);
+    return false;
 }
 
 function resetLevel() {
@@ -223,5 +262,9 @@ function nextLevel() {
     foreground.removeAll();
     // Load next level
     level++;
-    loadLevel();
+    var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
+    for(i = 0; i < text.length; i++) {
+        text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
+    }
+    loadLevel(text);
 }

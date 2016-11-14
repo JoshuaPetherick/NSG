@@ -1,5 +1,5 @@
 
-function enemyInit(x, y, h, w) {
+function enemyInit(x, y, w, h) {
     var enemy = game.add.sprite(x, y, 'enemy');
     enemy.anchor.setTo(0, 0);
     enemy.state = enemyStates.PATROL;
@@ -10,15 +10,15 @@ function enemyInit(x, y, h, w) {
     enemy.width = w;
 
     enemy.speed = 3;
-    foreground.add(enemy);
+    background.add(enemy);
     return enemy;
 }
 
 function enemyUpdate(enemy) {
     // Check if colliding with player!
-    if (checkColliding(player, enemy)) {
-        resetLevel();
-    }
+    //if (checkColliding(player, enemy)) {
+        //resetLevel();
+    //}
 
     // Code to patrol - methodise this
     //enemy.x = enemy.x - enemy.speed;

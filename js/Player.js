@@ -1,5 +1,5 @@
 
-function playerInit(x, y, h, w) {
+function playerInit(x, y, w, h) {
     player = game.add.sprite(x, y, 'player');
     player.anchor.setTo(0, 0);
 
@@ -10,7 +10,7 @@ function playerInit(x, y, h, w) {
 
     player.speed = 2;
     player.state = playerStates.DARK;
-    foreground.add(player);
+    background.add(player);
 }
 
 function inputInit() {
@@ -117,9 +117,9 @@ function playerUpdate() {
 
 function playerCheckCollision(array) {
     for(i = 0; i < array.length; i++) {
-        if (checkColliding(player, array[i]) == true) {
-            return true; // If colliding then no longer need to check!
-        }
+        //if (checkColliding(player, array[i]) == true) {
+        //    return true; // If colliding then no longer need to check!
+        //}
     }
     return false; // Not colliding...
 }

@@ -1,13 +1,11 @@
 
-function floorInit(x, y, h, w) {
+function floorInit(x, y, w, h) {
     // Init
-    var floor = game.add.sprite(x, y, 'floor');
-    floor.anchor.setTo(0, 0);
-
+    var floor = background.create(x, y, 'floor');
     floor.height = h;
     floor.width = w;
 
-    background.add(floor);
+    world.putTile(0, layer.getTileX(x), layer.getTileY(y), layer);
     return floor;
 }
 

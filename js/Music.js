@@ -2,6 +2,11 @@
 // Please note all sounds obtained through Freesound.org.
 //  Sounds are all licensed under the Creative Commons License
 // --
+
+// Audio Variables
+var backgroundMusic;
+var yell;
+
 function musicInit(song) {
     // Init
     backgroundMusic = game.add.audio(song);

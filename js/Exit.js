@@ -1,12 +1,11 @@
 
-function exitInit(x, y, h, w) {
+function exitInit(x, y, w, h) {
     // Init
-    exit = game.add.sprite(x, y, 'exit');
-    exit.anchor.setTo(-0.5, 0);
-
+    exit = background.create(x, y, 'exit');
     exit.height = h;
     exit.width = w;
-    background.add(exit);
+
+    world.putTile(0, layer.getTileX(x), layer.getTileY(y), layer);
     return exit;
 }
 
