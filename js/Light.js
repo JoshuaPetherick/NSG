@@ -1,13 +1,20 @@
 
-function lightInit(x, y) {
-    // Init
-    var light = background.create(x, y, 'light');
-    //light.x = light.x + (light.width/2);
+function Light(x, y) {
+    this.light = game.add.sprite(x, y, 'light');
+    this.light.width = TileSizeX;
+    this.light.height = TileSizeY;
 
-    world.putTile(0, layer.getTileX(x), layer.getTileY(y), layer);
-    return light;
-}
+    game.physics.enable(this.light, Phaser.Physics.ARCADE);
+    this.light.body.allowGravity = false;
+    this.light.body.immovable = true;
+    lightLayer.add(this.light);
 
-function lightUpdate() {
-    // Update
+    // Add functions below
+    this.lightUpdate = function () {
+        // Update
+    }
+
+    this.lightCollision = function () {
+        // Change player state
+    }
 }

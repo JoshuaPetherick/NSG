@@ -1,28 +1,22 @@
 
-function enemyInit(x, y, w, h) {
-    var enemy = game.add.sprite(x, y, 'enemy');
-    enemy.anchor.setTo(0, 0);
-    enemy.state = enemyStates.PATROL;
+function Enemy(x, y) {
+    this.enemy = game.add.sprite(x, y, 'enemy');
+    this.enemy.width = (TileSizeX/2);
+    this.enemy.height = TileSizeY;
+    this.origX = x;
+    this.origY = y;
 
-    enemy.origX = x;
-    enemy.origY = y;
-    enemy.height = h;
-    enemy.width = w;
+    game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
+    this.enemy.body.allowGravity = false;
+    this.enemy.body.immovable = true;
+    background.add(this.enemy);
 
-    enemy.speed = 3;
-    background.add(enemy);
-    return enemy;
-}
+    // Add functions below
+    this.enemyUpdate = function () {
+        // Update
+    }
 
-function enemyUpdate(enemy) {
-    // Check if colliding with player!
-    //if (checkColliding(player, enemy)) {
-        //resetLevel();
-    //}
-
-    // Code to patrol - methodise this
-    //enemy.x = enemy.x - enemy.speed;
-    //if (enemy.x <= 0) {
-    //    enemy.x = enemy.x + enemy.speed;
-    //}
+    this.enemyCollision = function () {
+        // Load new level!
+    }
 }

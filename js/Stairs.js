@@ -1,31 +1,22 @@
 
-function stairInit(x, y, w, h) {
-    // Init
-    var stair = background.create(x, y, 'stairs');
-    stair.height = h;
-    stair.width = w;
+function Stair(x, y) {
+    this.stair = game.add.sprite(x, y, 'stairs');
+    this.stair.width = TileSizeX;
+    this.stair.height = TileSizeY;
 
-    world.putTile(0, layer.getTileX(x), layer.getTileY(y), layer);
-    return stair;
+    game.physics.enable(this.stair, Phaser.Physics.ARCADE);
+    this.stair.body.allowGravity = false;
+    this.stair.body.gravity.y = 0;
+    this.stair.body.immovable = true;
+    stairLayer.add(this.stair);
+
+    // Add functions below
+    this.stairUpdate = function () {
+        // Update
+    }
+
+    this.stairCollision = function () {
+        // Turn player gravity off!
+        player.setGravity(0);
+    }
 }
-
-function stairUpdate() {
-    // Update
-}
-
-
-// See Javascript Prototype Recipe below:
-
-// Classname=function (...) {
-//      parentClass.call (...)
-//      ..
-//}
-//Classname.prototype=
-//  object.create(parentClass.prototype);
-//Classname.prototype.constructor=Classname;
-//
-//Classname.prototype.funcname = function (...) {
-//  ..
-//}
-//
-//fred = new Classname(..);
