@@ -21,8 +21,8 @@ var lightLayer;
 var exitLayer;
 
 // Tile Info
-var TileSizeX = 50;
-var TileSizeY = 50;
+var TileSizeX;
+var TileSizeY;
 
 // Sprite Variables
 var world;
@@ -38,16 +38,6 @@ var gameState;
 var gameStates = {
     MENU: 0,
     PLAY: 1
-};
-var playerStates = {
-    DARK: 0,
-    LIGHT: 1,
-    FALLING: 2
-};
-var enemyStates = {
-    PATROL: 0,
-    CHASE: 1,
-    ALERT: 2
 };
 
 var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Game', {
@@ -131,9 +121,28 @@ function update() {
 
             case gameStates.PLAY:
                 game.physics.arcade.collide(player.playerSprite, background);
-                //game.physics.arcade.overlap(player, lightLayer, exit.exitCollision());
-                //game.physics.arcade.overlap(player, lightLayer, Light.lightCollision());
-                //game.physics.arcade.overlap(player, stairLayer, Stair.stairCollision());
+                if (game.physics.arcade.overlap(player.playerSprite, exitLayer)) {
+                    exit.exitCollision();
+                }
+
+                for (i in lights) {
+                    if (game.physics.arcade.overlap(player.playerSprite, lightLayer)) {
+                        player.state = player.playerStates.LIGHT;
+                    }
+                    else {
+                        player.state = player.playerStates.DARK;
+                    }
+                }
+
+                for ( i in stairs ) {
+                    if (game.physics.arcade.overlap(player.playerSprite, stairLayer)) {
+                        console.log("Fall!");
+                        player.setGravity(false);
+                    }
+                    else {
+                        player.setGravity(true);
+                    }
+                }
 
                 player.playerInput();
                 player.playerUpdate();
@@ -210,6 +219,7 @@ function sortTimer(time) {
 
 function nextLevel() {
     // Empty arrays
+    player = null;
     enemies = [];
     floors = [];
     stairs = [];

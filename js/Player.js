@@ -9,9 +9,7 @@ function Player(x, y) {
     game.physics.enable(this.playerSprite, Phaser.Physics.ARCADE);
     this.playerSprite.body.collideWorldBounds = true;
     this.playerSprite.body.mass = 0; // Remove mass so doesn't push other objects down...
-
-    this.speed = 200;
-    this.state = playerStates.DARK;
+    this.speed = 100;
 
     // Handle button input
     this.leftKey = false;
@@ -40,10 +38,15 @@ function Player(x, y) {
     this.spaceButton.events.onInputDown.add(function(){player.spaceBar = true});
     this.spaceButton.events.onInputUp.add(function(){player.spaceBar = false});
 
+    this.playerStates = {
+        DARK: 0,
+        LIGHT: 1
+    };
+    this.state = this.playerStates.DARK;
+
     // Add functions below
     this.playerUpdate = function () {
         // Update
-        this.setGravity(game.physics.arcade.gravity.y); // Best way to undo if no longer colliding with stairs
         if (game.input.currentPointers == 0 && !game.input.activePointer.isMouse) {
             //On screen keys can sometime get stuck, this IF fixes that issue
             this.leftKey = false;
@@ -63,12 +66,12 @@ function Player(x, y) {
         }
         if (this.downKey == true) {
             if (this.playerSprite.body.gravity.y == 0) {
-                this.playerSprite.body.velocity.y = -50;
+                this.playerSprite.body.velocity.y = (this.speed/2);
             }
         }
         if (this.upKey == true) {
             if (this.playerSprite.body.gravity.y == 0) {
-                this.playerSprite.body.velocity.y = 50;
+                this.playerSprite.body.velocity.y = -(this.speed/2);
             }
         }
         if (this.spaceBar == true) {
@@ -77,6 +80,6 @@ function Player(x, y) {
     }
 
     this.setGravity = function(gravity) {
-        this.playerSprite.body.gravity.y = gravity;
+        this.playerSprite.body.allowGravity = gravity;
     }
 }

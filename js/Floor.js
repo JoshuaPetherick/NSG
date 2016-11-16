@@ -1,13 +1,13 @@
 
 function Floor(x, y) {
-    this.floor = game.add.sprite(x, y, 'floor');
-    this.floor.width = TileSizeX;
-    this.floor.height = TileSizeY;
+    this.floorSprite = game.add.sprite(x, y, 'floor');
+    this.floorSprite.width = TileSizeX;
+    this.floorSprite.height = TileSizeY;
 
-    game.physics.enable(this.floor, Phaser.Physics.ARCADE);
-    this.floor.body.allowGravity = false;
-    this.floor.body.immovable = true;
-    background.add(this.floor);
+    game.physics.enable(this.floorSprite, Phaser.Physics.ARCADE);
+    this.floorSprite.body.allowGravity = false;
+    this.floorSprite.body.immovable = true;
+    background.add(this.floorSprite);
 
     // Add functions below
     this.floorUpdate = function () {

@@ -1,14 +1,14 @@
 
 function Stair(x, y) {
-    this.stair = game.add.sprite(x, y, 'stairs');
-    this.stair.width = TileSizeX;
-    this.stair.height = TileSizeY;
+    this.stairSprite = game.add.sprite(x, y, 'stairs');
+    this.stairSprite.width = TileSizeX;
+    this.stairSprite.height = TileSizeY;
 
-    game.physics.enable(this.stair, Phaser.Physics.ARCADE);
-    this.stair.body.allowGravity = false;
-    this.stair.body.gravity.y = 0;
-    this.stair.body.immovable = true;
-    stairLayer.add(this.stair);
+    game.physics.enable(this.stairSprite, Phaser.Physics.ARCADE);
+    this.stairSprite.body.allowGravity = false;
+    this.stairSprite.body.gravity.y = 0;
+    this.stairSprite.body.immovable = true;
+    stairLayer.add(this.stairSprite);
 
     // Add functions below
     this.stairUpdate = function () {
@@ -17,6 +17,6 @@ function Stair(x, y) {
 
     this.stairCollision = function () {
         // Turn player gravity off!
-        player.setGravity(0);
+        player.setGravity(false);
     }
 }

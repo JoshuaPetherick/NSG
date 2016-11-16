@@ -1,13 +1,13 @@
 
 function Light(x, y) {
-    this.light = game.add.sprite(x, y, 'light');
-    this.light.width = TileSizeX;
-    this.light.height = TileSizeY;
+    this.lightSprite = game.add.sprite(x, y, 'light');
+    this.lightSprite.width = TileSizeX;
+    this.lightSprite.height = TileSizeY;
 
-    game.physics.enable(this.light, Phaser.Physics.ARCADE);
-    this.light.body.allowGravity = false;
-    this.light.body.immovable = true;
-    lightLayer.add(this.light);
+    game.physics.enable(this.lightSprite, Phaser.Physics.ARCADE);
+    this.lightSprite.body.allowGravity = false;
+    this.lightSprite.body.immovable = true;
+    lightLayer.add(this.lightSprite);
 
     // Add functions below
     this.lightUpdate = function () {
