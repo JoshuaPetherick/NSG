@@ -16,21 +16,21 @@ var level = 1;
 
 // Phaser draw groups
 var background;
-var stairLayer;
 var lightLayer;
+var stairLayer;
 var exitLayer;
+var enemyLayer;
 
 // Tile Info
 var TileSizeX;
 var TileSizeY;
 
 // Sprite Variables
-var world;
 var player;
 var enemies = []; // Array of Enemies
 var floors = []; // Array of Floors
 var stairs = []; // Array of Ladders
-var lights = []; // Array of Bulbs
+var lights = []; // Array of Lights
 var exit;
 
 // State variables
@@ -63,8 +63,8 @@ function preload() {
     game.load.image('upArrow', 'assets/images/ArrowUp.png');
     game.load.image('spaceBar', 'assets/images/SpaceBar.png');
     // Audio
-    game.load.audio('yell', 'assets/sounds/yell_hey.wav');
     game.load.audio('background1', 'assets/sounds/background_eerie.mp3');
+    game.load.audio('yell', 'assets/sounds/yell_hey.wav');
     // Text
     game.load.text('level1', 'assets/levels/lvl1.txt');
     game.load.text('level2', 'assets/levels/lvl2.txt');
@@ -95,12 +95,14 @@ function create() {
                 text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
             }
             TileSizeY = Math.round(GAMEHEIGHT/text.length);
-            TileSizeX = Math.round(GAMEWIDTH/(text[0].length)); // Minus 1 during debug
+            TileSizeX = Math.round(GAMEWIDTH/(text[0].length));
 
             background = game.add.group();
             lightLayer = game.add.group();
             stairLayer = game.add.group();
             exitLayer = game.add.group();
+            enemyLayer = game.add.group();
+
             loadLevel(text);
 
             yell = game.add.audio('yell');
@@ -124,7 +126,11 @@ function update() {
                 if (game.physics.arcade.overlap(player.playerSprite, exitLayer)) {
                     exit.exitCollision();
                 }
-
+                for (i in enemies) {
+                    if (game.physics.arcade.overlap(player.playerSprite, enemyLayer)) {
+                        resetLevel();
+                    }
+                }
                 for (i in lights) {
                     if (game.physics.arcade.overlap(player.playerSprite, lightLayer)) {
                         player.state = player.playerStates.LIGHT;
@@ -133,10 +139,8 @@ function update() {
                         player.state = player.playerStates.DARK;
                     }
                 }
-
                 for ( i in stairs ) {
                     if (game.physics.arcade.overlap(player.playerSprite, stairLayer)) {
-                        console.log("Fall!");
                         player.setGravity(false);
                     }
                     else {
@@ -224,11 +228,13 @@ function nextLevel() {
     floors = [];
     stairs = [];
     lights = [];
+    exit = null;
     // Empty phaser group
     background.removeAll();
     lightLayer.removeAll();
     stairLayer.removeAll();
     exitLayer.removeAll();
+    enemyLayer.removeAll();
     // Load next level
     level++;
     var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
@@ -239,10 +245,10 @@ function nextLevel() {
 }
 
 function resetLevel() {
-    player.x = player.origX;
-    player.y = player.origY;
-    for(i = 0; i < enemies.length; i++) {
-        enemies[i].x = enemies[i].origX;
-        enemies[i].y = enemies[i].origY;
+    player.playerSprite.x = player.origX;
+    player.playerSprite.y = player.origY;
+    for (i in enemies) {
+        enemies[i].enemySprite.x = enemies[i].origX;
+        enemies[i].enemySprite.y = enemies[i].origY;
     }
 }

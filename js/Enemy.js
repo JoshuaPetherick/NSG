@@ -9,7 +9,7 @@ function Enemy(x, y) {
     game.physics.enable(this.enemySprite, Phaser.Physics.ARCADE);
     this.enemySprite.body.allowGravity = false;
     this.enemySprite.body.immovable = true;
-    background.add(this.enemySprite);
+    enemyLayer.add(this.enemySprite);
 
     this.enemyStates = {
         PATROL: 0,
@@ -21,9 +21,5 @@ function Enemy(x, y) {
     // Add functions below
     this.enemyUpdate = function () {
         // Update
-    }
-
-    this.enemyCollision = function () {
-        // Load new level!
     }
 }

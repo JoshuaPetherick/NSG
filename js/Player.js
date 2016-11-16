@@ -19,22 +19,27 @@ function Player(x, y) {
     this.spaceBar = false;
 
     this.leftButton = game.add.button(10, GAMEHEIGHT-40,'leftArrow', null, this, 0, 1, 0, 1);
+    this.leftButton.events.onInputOut.add(function(){player.leftKey = false;});
     this.leftButton.events.onInputDown.add(function(){player.leftKey = true;});
     this.leftButton.events.onInputUp.add(function(){player.leftKey = false;});
 
     this.rightButton = game.add.button(GAMEWIDTH-60, GAMEHEIGHT-40, 'rightArrow', null, this, 0, 1, 0, 1);;
+    this.rightButton.events.onInputOut.add(function(){player.rightKey = false});
     this.rightButton.events.onInputDown.add(function(){player.rightKey = true});
     this.rightButton.events.onInputUp.add(function(){player.rightKey = false});
 
     this.upButton = game.add.button(GAMEWIDTH-110, GAMEHEIGHT-50, 'upArrow', null, this, 0, 1, 0, 1);
+    this.upButton.events.onInputOut.add(function(){player.upKey = false});
     this.upButton.events.onInputDown.add(function(){player.upKey = true});
     this.upButton.events.onInputUp.add(function(){player.upKey = false});
 
     this.downButton = game.add.button(70, GAMEHEIGHT-50, 'downArrow', null, this, 0, 1, 0, 1);
+    this.downButton.events.onInputOut.add(function(){player.downKey = false});
     this.downButton.events.onInputDown.add(function(){player.downKey = true});
     this.downButton.events.onInputUp.add(function(){player.downKey = false});
 
     this.spaceButton = game.add.button((GAMEWIDTH/2)-50, GAMEHEIGHT-40, 'spaceBar', null, this, 0, 1, 0, 1);
+    this.spaceButton.events.onInputOut.add(function(){player.spaceBar = false});
     this.spaceButton.events.onInputDown.add(function(){player.spaceBar = true});
     this.spaceButton.events.onInputUp.add(function(){player.spaceBar = false});
 
@@ -43,6 +48,7 @@ function Player(x, y) {
         LIGHT: 1
     };
     this.state = this.playerStates.DARK;
+    enemyLayer.add(this.playerSprite);
 
     // Add functions below
     this.playerUpdate = function () {
@@ -65,12 +71,12 @@ function Player(x, y) {
             this.playerSprite.body.velocity.x = this.speed;
         }
         if (this.downKey == true) {
-            if (this.playerSprite.body.gravity.y == 0) {
+            if (this.playerSprite.body.allowGravity == false) {
                 this.playerSprite.body.velocity.y = (this.speed/2);
             }
         }
         if (this.upKey == true) {
-            if (this.playerSprite.body.gravity.y == 0) {
+            if (this.playerSprite.body.allowGravity == false) {
                 this.playerSprite.body.velocity.y = -(this.speed/2);
             }
         }

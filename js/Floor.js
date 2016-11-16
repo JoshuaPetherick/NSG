@@ -8,9 +8,4 @@ function Floor(x, y) {
     this.floorSprite.body.allowGravity = false;
     this.floorSprite.body.immovable = true;
     background.add(this.floorSprite);
-
-    // Add functions below
-    this.floorUpdate = function () {
-        // Update
-    }
 }

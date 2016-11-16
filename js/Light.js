@@ -8,13 +8,4 @@ function Light(x, y) {
     this.lightSprite.body.allowGravity = false;
     this.lightSprite.body.immovable = true;
     lightLayer.add(this.lightSprite);
-
-    // Add functions below
-    this.lightUpdate = function () {
-        // Update
-    }
-
-    this.lightCollision = function () {
-        // Change player state
-    }
 }
