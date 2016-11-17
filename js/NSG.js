@@ -1,11 +1,8 @@
 //--- Still to investigate --- \\
-// - Scaling images down/up to window size
 // - Menu buttons (Similar code to making an on-screen movement arrow)
 
 // Behaviour Trees (AI) // http://behavior3js.guineashots.com/ https://github.com/AlmasB/FXGL/blob/master/samples/assets/ai/patrol.tree
 // What file type scales best (Vector)? (SVG)
-// Judged on original code or overall delivery? Code itself, can use phaser as it's the framework/library
-// Lookup mobile input on Phaser Examples - make sure doesn't interfere with current structure
 // --------------------------- \\
 
 // Core-game variables
@@ -13,6 +10,7 @@ var GAMEHEIGHT = 600;
 var GAMEWIDTH = 900;
 var playing_bool = true;
 var level = 1;
+var backgroundMusic;
 
 // Phaser draw groups
 var background;
@@ -105,8 +103,10 @@ function create() {
 
             loadLevel(text);
 
-            yell = game.add.audio('yell');
-            musicInit('background1');
+            backgroundMusic = new sound('background1');
+            backgroundMusic.musicVol(0.75);
+            backgroundMusic.musicLoop();
+
             break;
     }
 } // create()

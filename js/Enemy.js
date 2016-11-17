@@ -9,7 +9,10 @@ function Enemy(x, y) {
     game.physics.enable(this.enemySprite, Phaser.Physics.ARCADE);
     this.enemySprite.body.allowGravity = false;
     this.enemySprite.body.immovable = true;
+
     enemyLayer.add(this.enemySprite);
+
+    this.yell = new sound('yell');
 
     this.enemyStates = {
         PATROL: 0,

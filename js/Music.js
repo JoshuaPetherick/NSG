@@ -3,30 +3,30 @@
 //  Sounds are all licensed under the Creative Commons License
 // --
 
-// Audio Variables
-var backgroundMusic;
-var yell;
-
-function musicInit(song) {
+function sound(song) {
     // Init
-    backgroundMusic = game.add.audio(song);
-    //musicVol(1); // No longer need to reduce volume
-    musicPlay();
-}
+    this.music = game.add.audio(song);
 
-function musicUpdate() {
-    // Update song(?)
-}
+    this.musicUpdate = function(song) {
+        // Update song(?)
+        this.music.stop();
+        this.music = game.add.audio(song);
+    }
 
-function musicPlay() {
-    backgroundMusic.play();
-    backgroundMusic.loopFull();
-}
+    this.musicPlay = function() {
+        this.music.play();
+    }
 
-function musicStop() {
-    backgroundMusic.stop();
-}
+    this.musicLoop = function() {
+        this.music.play();
+        this.music.loopFull();
+    }
 
-function musicVol(vol) {
-    backgroundMusic.volume = vol;
+    this.musicStop = function() {
+        this.music.stop();
+    }
+
+    this.musicVol = function(vol) {
+        this.music.volume = vol;
+    }
 }
