@@ -29,13 +29,16 @@ var enemies = []; // Array of Enemies
 var floors = []; // Array of Floors
 var stairs = []; // Array of Ladders
 var lights = []; // Array of Lights
+var buttons = [];
 var exit;
 
 // State variables
 var gameState;
 var gameStates = {
     MENU: 0,
-    PLAY: 1
+    PLAY: 1,
+    SCORE: 2,
+    OPTIONS: 3
 };
 
 var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Game', {
@@ -46,7 +49,7 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Ga
 
 function preload() {
     // Start state
-    gameState = gameStates.PLAY;
+    gameState = gameStates.MENU;
     // Load in images/xml
     game.load.image('player', 'assets/images/player.png');
     game.load.image('enemy', 'assets/images/enemy.png');
@@ -60,6 +63,9 @@ function preload() {
     game.load.image('downArrow', 'assets/images/ArrowDown.png');
     game.load.image('upArrow', 'assets/images/ArrowUp.png');
     game.load.image('spaceBar', 'assets/images/SpaceBar.png');
+    game.load.spritesheet('buttonPlay', 'assets/images/buttonPlay.png', 194, 66);
+    game.load.spritesheet('buttonHighscore', 'assets/images/buttonHighscore.png', 194, 66);
+    game.load.spritesheet('buttonOption', 'assets/images/buttonOption.png', 194, 66);
     // Audio
     game.load.audio('background1', 'assets/sounds/background_eerie.mp3');
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
@@ -81,7 +87,27 @@ function create() {
     switch(gameState)
     {
         case gameStates.MENU:
+            background = game.add.group();
 
+            buttons.push(new button("PLAY"));
+            buttons.push(new button("HIGHSCORE"));
+            buttons.push(new button("OPTIONS"));
+            break;
+
+        case gameStates.SCORE:
+            background = game.add.group();
+
+            buttons.push(new button("PLAY"));
+            //buttons.push(new button("HIGHSCORE"));
+            buttons.push(new button("OPTIONS"));
+            break;
+
+        case gameStates.OPTIONS:
+            background = game.add.group();
+
+            buttons.push(new button("PLAY"));
+            buttons.push(new button("HIGHSCORE"));
+            //buttons.push(new button("OPTIONS"));
             break;
 
         case gameStates.PLAY:
@@ -95,7 +121,6 @@ function create() {
             TileSizeY = Math.round(GAMEHEIGHT/text.length);
             TileSizeX = Math.round(GAMEWIDTH/(text[0].length));
 
-            background = game.add.group();
             lightLayer = game.add.group();
             stairLayer = game.add.group();
             exitLayer = game.add.group();
@@ -106,7 +131,6 @@ function create() {
             backgroundMusic = new sound('background1');
             backgroundMusic.musicVol(0.75);
             backgroundMusic.musicLoop();
-
             break;
     }
 } // create()
@@ -117,10 +141,6 @@ function update() {
     {
         switch(gameState)
         {
-            case gameStates.MENU:
-                // Check and update based on Menu choices!
-                break;
-
             case gameStates.PLAY:
                 game.physics.arcade.collide(player.playerSprite, background);
                 if (game.physics.arcade.overlap(player.playerSprite, exitLayer)) {
