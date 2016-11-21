@@ -1,7 +1,8 @@
 //--- Still to investigate --- \\
-// - Menu buttons (Similar code to making an on-screen movement arrow)
-
-// Behaviour Trees (AI) // http://behavior3js.guineashots.com/ https://github.com/AlmasB/FXGL/blob/master/samples/assets/ai/patrol.tree
+// Behaviour Trees (AI):
+// http://behavior3js.guineashots.com/
+// https://github.com/renatopp/behavior3js/wiki/Core%2001%20Introduction
+// http://behavior3js.guineashots.com/editor/
 // What file type scales best (Vector)? (SVG)
 // --------------------------- \\
 
@@ -49,21 +50,23 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Ga
 });
 
 function preload() {
+    console.log('Phaser Version: ' + Phaser.VERSION);
+    console.log('B3 Version: ' + b3.VERSION);
     // Start state
     gameState = gameStates.MENU;
-    // Load in images/xml
+    // Images
     game.load.image('player', 'assets/images/player.png');
     game.load.image('enemy', 'assets/images/enemy.png');
     game.load.image('floor', 'assets/images/floor.png');
     game.load.image('light', 'assets/images/light.png');
     game.load.image('stairs', 'assets/images/stairs.png');
     game.load.image('exit', 'assets/images/exit.png');
-
     game.load.image('leftArrow', 'assets/images/ArrowLeft.png');
     game.load.image('rightArrow', 'assets/images/ArrowRight.png');
     game.load.image('downArrow', 'assets/images/ArrowDown.png');
     game.load.image('upArrow', 'assets/images/ArrowUp.png');
     game.load.image('spaceBar', 'assets/images/SpaceBar.png');
+    // Spritesheets
     game.load.spritesheet('buttonPlay', 'assets/images/buttonPlay.png', 194, 66);
     game.load.spritesheet('buttonHighscore', 'assets/images/buttonHighscore.png', 194, 66);
     game.load.spritesheet('buttonOption', 'assets/images/buttonOption.png', 194, 66);
@@ -71,16 +74,11 @@ function preload() {
     game.load.audio('background1', 'assets/sounds/background_eerie.mp3');
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
     // Text
-    game.load.text('level1', 'assets/levels/lvl1.txt');
-    game.load.text('level2', 'assets/levels/lvl2.txt');
-    game.load.text('level3', 'assets/levels/lvl3.txt');
-    game.load.text('level4', 'assets/levels/lvl4.txt');
-    game.load.text('level5', 'assets/levels/lvl5.txt');
-    game.load.text('level6', 'assets/levels/lvl6.txt');
-    game.load.text('level7', 'assets/levels/lvl7.txt');
-    game.load.text('level8', 'assets/levels/lvl8.txt');
-    game.load.text('level9', 'assets/levels/lvl9.txt');
-    game.load.text('level10', 'assets/levels/lvl10.txt');
+    var maxLvls = 10;
+    for (var i = 1; i <= maxLvls; i++) {
+        // Load all level text files!
+        game.load.text('level' + i, 'assets/levels/lvl' + i + '.txt')
+    }
 } //preload();
 
 function create() {
@@ -97,16 +95,12 @@ function create() {
             break;
 
         case gameStates.SCORE:
-            background = game.add.group();
-
             buttons.push(new button("PLAY"));
             //buttons.push(new button("HIGHSCORE"));
             buttons.push(new button("OPTIONS"));
             break;
 
         case gameStates.OPTIONS:
-            background = game.add.group();
-
             buttons.push(new button("PLAY"));
             buttons.push(new button("HIGHSCORE"));
             //buttons.push(new button("OPTIONS"));
@@ -144,32 +138,6 @@ function update() {
         switch(gameState)
         {
             case gameStates.PLAY:
-                game.physics.arcade.collide(player.playerSprite, background);
-                if (game.physics.arcade.overlap(player.playerSprite, exitLayer)) {
-                    exit.exitCollision();
-                }
-                for (i in enemies) {
-                    if (game.physics.arcade.overlap(player.playerSprite, enemyLayer)) {
-                        resetLevel();
-                    }
-                }
-                for (i in lights) {
-                    if (game.physics.arcade.overlap(player.playerSprite, lightLayer)) {
-                        player.state = player.playerStates.LIGHT;
-                    }
-                    else {
-                        player.state = player.playerStates.DARK;
-                    }
-                }
-                for ( i in stairs ) {
-                    if (game.physics.arcade.overlap(player.playerSprite, stairLayer)) {
-                        player.setGravity(false);
-                    }
-                    else {
-                        player.setGravity(true);
-                    }
-                }
-
                 player.playerInput();
                 player.playerUpdate();
                 break;
@@ -178,7 +146,7 @@ function update() {
 } // update()
 
 function render() {
-    game.debug.text(game.time.fps || '--', 2, 14, "#00ff00"); // Shows FPS
+    game.debug.text(game.time.fps || '--', 2, 14, '#00ff00'); // Shows FPS
     game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, 25);
 } // render()
 

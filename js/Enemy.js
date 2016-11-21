@@ -21,6 +21,10 @@ function Enemy(x, y) {
     };
     this.state = this.enemyStates.PATROL;
 
+    this.tree = b3.BehaviourTree; // Create new Behavior Tree
+    // Import behaviour tree from .JSON file!
+    // Allows me to update AI without going into Code...?
+
     // Add functions below
     this.enemyUpdate = function () {
         // Update
