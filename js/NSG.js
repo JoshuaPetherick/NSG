@@ -44,7 +44,8 @@ var gameStates = {
 var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Game', {
     preload: preload,
     create: create,
-    update: update
+    update: update,
+    render: render
 });
 
 function preload() {
@@ -87,6 +88,7 @@ function create() {
     switch(gameState)
     {
         case gameStates.MENU:
+            game.time.advancedTiming = true; // Used for FPS counter
             background = game.add.group();
 
             buttons.push(new button("PLAY"));
@@ -170,12 +172,15 @@ function update() {
 
                 player.playerInput();
                 player.playerUpdate();
-
-                game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, 25);
                 break;
         }
     }
 } // update()
+
+function render() {
+    game.debug.text(game.time.fps || '--', 2, 14, "#00ff00"); // Shows FPS
+    game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, 25);
+} // render()
 
 function loadLevel(text) {
     // For each Line in Text  -  Determines Y
