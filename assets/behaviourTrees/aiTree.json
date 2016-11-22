@@ -1,0 +1,185 @@
+{
+    "title": "EnemyAI",
+    "description": "Tree for Enemy AI",
+    "root": "91f73fd1-95c0-4f00-922f-02e4dc056562",
+    "display": {
+        "camera_x": 683,
+        "camera_y": 319,
+        "camera_z": 1,
+        "x": -288,
+        "y": 16
+    },
+    "properties": {},
+    "nodes": {
+        "b0c5dd67-50fc-4e0c-8821-13ee85a092ec": {
+            "id": "b0c5dd67-50fc-4e0c-8821-13ee85a092ec",
+            "name": "Sequence",
+            "title": "Sequence",
+            "description": "Sorts out Chasing",
+            "display": {
+                "x": -16,
+                "y": -128
+            },
+            "parameters": {},
+            "properties": {},
+            "children": [
+                "89831528-fb40-4961-9efb-443a4260b919",
+                "1d0867f8-1496-4388-9ce6-64818e862606"
+            ]
+        },
+        "699cf865-8488-4c71-ba22-85c6436021d7": {
+            "id": "699cf865-8488-4c71-ba22-85c6436021d7",
+            "name": "Repeater",
+            "title": "Repeater",
+            "description": "",
+            "display": {
+                "x": -544,
+                "y": 0
+            },
+            "parameters": {
+                "maxLoop": -1
+            },
+            "properties": {},
+            "child": null
+        },
+        "8c426bf4-387e-485c-a543-0c5639303e4b": {
+            "id": "8c426bf4-387e-485c-a543-0c5639303e4b",
+            "name": "Failer",
+            "title": "Failer",
+            "description": "",
+            "display": {
+                "x": -576,
+                "y": 160
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "41b4d46a-532d-4772-a9e0-e81282371159": {
+            "id": "41b4d46a-532d-4772-a9e0-e81282371159",
+            "name": "Succeeder",
+            "title": "Succeeder",
+            "description": "",
+            "display": {
+                "x": -624,
+                "y": 160
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "89831528-fb40-4961-9efb-443a4260b919": {
+            "id": "89831528-fb40-4961-9efb-443a4260b919",
+            "name": "Chase",
+            "title": "Chasing Player?",
+            "description": "",
+            "display": {
+                "x": 144,
+                "y": -160
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "1d0867f8-1496-4388-9ce6-64818e862606": {
+            "id": "1d0867f8-1496-4388-9ce6-64818e862606",
+            "name": "Chase Player",
+            "title": "Chase Player",
+            "description": "",
+            "display": {
+                "x": 144,
+                "y": -96
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "91f73fd1-95c0-4f00-922f-02e4dc056562": {
+            "id": "91f73fd1-95c0-4f00-922f-02e4dc056562",
+            "name": "Priority",
+            "title": "Priority",
+            "description": "Check if Chasing",
+            "display": {
+                "x": -192,
+                "y": 16
+            },
+            "parameters": {},
+            "properties": {},
+            "children": [
+                "b0c5dd67-50fc-4e0c-8821-13ee85a092ec",
+                "6b4bbf40-f884-412b-b8c7-a5b776100881",
+                "2f29516b-7115-4f1a-9adf-5875569010a2"
+            ]
+        },
+        "6b4bbf40-f884-412b-b8c7-a5b776100881": {
+            "id": "6b4bbf40-f884-412b-b8c7-a5b776100881",
+            "name": "Sequence",
+            "title": "Sequence",
+            "description": "Handles if sees player",
+            "display": {
+                "x": 0,
+                "y": 16
+            },
+            "parameters": {},
+            "properties": {},
+            "children": [
+                "520c7e6e-93d3-46cf-880b-3001e375e44e",
+                "53b413b8-7e59-4268-819f-60f79ee0cee1"
+            ]
+        },
+        "520c7e6e-93d3-46cf-880b-3001e375e44e": {
+            "id": "520c7e6e-93d3-46cf-880b-3001e375e44e",
+            "name": "See Player",
+            "title": "See Player?",
+            "description": "",
+            "display": {
+                "x": 176,
+                "y": -16
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "53b413b8-7e59-4268-819f-60f79ee0cee1": {
+            "id": "53b413b8-7e59-4268-819f-60f79ee0cee1",
+            "name": "Chase Player",
+            "title": "Chase Player",
+            "description": "",
+            "display": {
+                "x": 176,
+                "y": 48
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "2f29516b-7115-4f1a-9adf-5875569010a2": {
+            "id": "2f29516b-7115-4f1a-9adf-5875569010a2",
+            "name": "Patrol",
+            "title": "Patrol",
+            "description": "",
+            "display": {
+                "x": 0,
+                "y": 176
+            },
+            "parameters": {},
+            "properties": {}
+        }
+    },
+    "custom_nodes": [
+        {
+            "name": "Chase",
+            "title": "Chasing Player?",
+            "category": "condition"
+        },
+        {
+            "name": "Chase Player",
+            "title": "Chase Player",
+            "category": "action"
+        },
+        {
+            "name": "See Player",
+            "title": "See Player?",
+            "category": "condition"
+        },
+        {
+            "name": "Patrol",
+            "title": "Patrol",
+            "category": "action"
+        }
+    ]
+}

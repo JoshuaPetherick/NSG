@@ -21,7 +21,8 @@ function Enemy(x, y) {
     };
     this.state = this.enemyStates.PATROL;
 
-    this.tree = b3.BehaviourTree; // Create new Behavior Tree
+    // this.treeText = game.cache.getText('AITree');
+    // this.tree.load(); // Get info from .JSON file
     // Import behaviour tree from .JSON file!
     // Allows me to update AI without going into Code...?
 

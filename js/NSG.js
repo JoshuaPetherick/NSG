@@ -3,6 +3,7 @@
 // http://behavior3js.guineashots.com/
 // https://github.com/renatopp/behavior3js/wiki/Core%2001%20Introduction
 // http://behavior3js.guineashots.com/editor/
+// https://github.com/efbenson/behavior3Test
 // What file type scales best (Vector)? (SVG)
 // --------------------------- \\
 
@@ -52,6 +53,7 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Ga
 function preload() {
     console.log('Phaser Version: ' + Phaser.VERSION);
     console.log('B3 Version: ' + b3.VERSION);
+    tree = b3.behaviourTree;
     // Start state
     gameState = gameStates.MENU;
     // Images
@@ -79,6 +81,7 @@ function preload() {
         // Load all level text files!
         game.load.text('level' + i, 'assets/levels/lvl' + i + '.txt')
     }
+    game.load.text('AITree', 'assets/behaviourTrees/aiTree.json');
 } //preload();
 
 function create() {
@@ -245,3 +248,4 @@ function resetLevel() {
         enemies[i].enemySprite.y = enemies[i].origY;
     }
 }
+

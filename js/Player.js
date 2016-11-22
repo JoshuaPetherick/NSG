@@ -52,28 +52,31 @@ function Player(x, y) {
 
     // Add functions below
     this.playerInput = function() {
-        game.physics.arcade.collide(player.playerSprite, background); // Need to move this for to Update, Once jump is sorted! :S
         this.playerSprite.body.velocity.x = 0;
-        //if jump timer stuff {this.playerSprite.body.velocity.x = 0; }
+        if (this.playerSprite.body.allowGravity == false) {
+            this.playerSprite.body.velocity.y = 0;
+        }
 
+        if (game.physics.arcade.collide(player.playerSprite, background)) {
+            if (this.spaceBar) {
+                this.playerSprite.body.velocity.y = -150;
+            }
+        }
         if (this.leftKey) {
-            this.playerSprite.body.velocity.x = -this.speed; // This doesn't do exactly what I want it to do...
+            this.playerSprite.body.velocity.x = -this.speed;
         }
         if (this.rightKey) {
             this.playerSprite.body.velocity.x = this.speed;
         }
-        if (this.downKey) {
-            if (this.playerSprite.body.allowGravity == false) {
-                this.playerSprite.body.velocity.y = (this.speed/2);
-            }
-        }
         if (this.upKey) {
             if (this.playerSprite.body.allowGravity == false) {
-                this.playerSprite.body.velocity.y = -(this.speed/2);
+                this.playerSprite.body.velocity.y = -this.speed;
             }
         }
-        if (this.spaceBar) {
-            this.playerSprite.body.velocity.y = -150;
+        if (this.downKey) {
+            if (this.playerSprite.body.allowGravity == false) {
+                this.playerSprite.body.velocity.y = this.speed;
+            }
         }
     }
 
