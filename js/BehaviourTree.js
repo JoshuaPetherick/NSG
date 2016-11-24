@@ -57,7 +57,7 @@ function AITree(enemy) {
         condition('AlarmTriggered', {
             tick: function(tick) {
                 var enemy = tick.blackboard.get('pointer');
-                if (player.intel == true) {
+                if (player.gotIntel == true) {
                     return b3.SUCCESS;
                 }
                 return b3.FAILURE;

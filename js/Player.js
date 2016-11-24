@@ -3,7 +3,7 @@ function Player(x, y) {
     this.playerSprite = game.add.sprite(x, y, 'player');
     this.playerSprite.width = (TileSizeX/2);
     this.playerSprite.height = TileSizeY;
-    this.intel = false;
+    this.gotIntel = false;
     this.origX = x;
     this.origY = y;
 
@@ -17,7 +17,6 @@ function Player(x, y) {
     this.rightKey = false;
     this.upKey = false;
     this.downKey = false;
-    this.spaceBar = false;
 
     this.leftButton = game.add.button(10, GAMEHEIGHT-40,'leftArrow', null, this, 0, 1, 0, 1);
     this.leftButton.events.onInputOut.add(function(){player.leftKey = false;});
@@ -43,12 +42,6 @@ function Player(x, y) {
     this.downButton.events.onInputUp.add(function(){player.downKey = false;});
     foreground.add(this.downButton);
 
-    this.spaceButton = game.add.button((GAMEWIDTH/2)-50, GAMEHEIGHT-40, 'spaceBar', null, this, 0, 1, 0, 1);
-    this.spaceButton.events.onInputOut.add(function(){player.spaceBar = false;});
-    this.spaceButton.events.onInputDown.add(function(){player.spaceBar = true;});
-    this.spaceButton.events.onInputUp.add(function(){player.spaceBar = false;});
-    foreground.add(this.spaceButton);
-
     this.playerStates = {
         DARK: 0,
         LIGHT: 1
@@ -64,7 +57,7 @@ function Player(x, y) {
         }
 
         if (game.physics.arcade.collide(player.playerSprite, background)) {
-            if (this.spaceBar) {
+            if (this.upKey) {
                 this.playerSprite.body.velocity.y = -150;
             }
         }
@@ -76,12 +69,12 @@ function Player(x, y) {
         }
         if (this.upKey) {
             if (!this.playerSprite.body.allowGravity) {
-                this.playerSprite.body.velocity.y = -this.speed;
+                this.playerSprite.body.velocity.y = -(this.speed-25);
             }
         }
         if (this.downKey) {
             if (!this.playerSprite.body.allowGravity) {
-                this.playerSprite.body.velocity.y = this.speed;
+                this.playerSprite.body.velocity.y = (this.speed-25);
             }
         }
     }
