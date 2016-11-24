@@ -53,7 +53,7 @@ function Player(x, y) {
     // Add functions below
     this.playerInput = function() {
         this.playerSprite.body.velocity.x = 0;
-        if (this.playerSprite.body.allowGravity == false) {
+        if (!this.playerSprite.body.allowGravity) {
             this.playerSprite.body.velocity.y = 0;
         }
 
@@ -69,12 +69,12 @@ function Player(x, y) {
             this.playerSprite.body.velocity.x = this.speed;
         }
         if (this.upKey) {
-            if (this.playerSprite.body.allowGravity == false) {
+            if (!this.playerSprite.body.allowGravity) {
                 this.playerSprite.body.velocity.y = -this.speed;
             }
         }
         if (this.downKey) {
-            if (this.playerSprite.body.allowGravity == false) {
+            if (!this.playerSprite.body.allowGravity) {
                 this.playerSprite.body.velocity.y = this.speed;
             }
         }
@@ -85,26 +85,23 @@ function Player(x, y) {
         if (game.physics.arcade.overlap(this.playerSprite, exitLayer)) {
             exit.exitCollision();
         }
-        for (i in enemies) {
-            if (game.physics.arcade.overlap(this.playerSprite, enemyLayer)) {
+        for (e in enemies) {
+            if (game.physics.arcade.overlap(this.playerSprite, enemies[e].enemySprite)
+                && (this.state == this.playerStates.LIGHT || enemies[e].state == enemies[e].enemyStates.CHASING)) {
                 resetLevel();
             }
         }
-        for (i in lights) {
-            if (game.physics.arcade.overlap(this.playerSprite, lightLayer)) {
-                this.state = this.playerStates.LIGHT;
-            }
-            else {
-                this.state = this.playerStates.DARK;
-            }
+         if (game.physics.arcade.overlap(this.playerSprite, lightLayer)) {
+             this.state = this.playerStates.LIGHT;
+         }
+        else {
+            this.state = this.playerStates.DARK;
         }
-        for ( i in stairs ) {
-            if (game.physics.arcade.overlap(this.playerSprite, stairLayer)) {
-                this.setGravity(false);
-            }
-            else {
-                this.setGravity(true);
-            }
+        if (game.physics.arcade.overlap(this.playerSprite, stairLayer)) {
+            this.setGravity(false);
+        }
+        else {
+            this.setGravity(true);
         }
     }
 

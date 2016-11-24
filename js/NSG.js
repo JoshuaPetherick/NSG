@@ -1,11 +1,3 @@
-//--- Still to investigate --- \\
-// Behaviour Trees (AI):
-// http://behavior3js.guineashots.com/
-// https://github.com/renatopp/behavior3js/wiki/Core%2001%20Introduction
-// http://behavior3js.guineashots.com/editor/
-// https://github.com/efbenson/behavior3Test
-// What file type scales best (Vector)? (SVG)
-// --------------------------- \\
 
 // Core-game variables
 var GAMEHEIGHT = 600;
@@ -53,7 +45,6 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Ga
 function preload() {
     console.log('Phaser Version: ' + Phaser.VERSION);
     console.log('B3 Version: ' + b3.VERSION);
-    tree = b3.behaviourTree;
     // Start state
     gameState = gameStates.MENU;
     // Images
@@ -143,6 +134,9 @@ function update() {
             case gameStates.PLAY:
                 player.playerInput();
                 player.playerUpdate();
+                for(e in enemies) {
+                    enemies[e].enemyUpdate();
+                }
                 break;
         }
     }
@@ -243,9 +237,9 @@ function nextLevel() {
 function resetLevel() {
     player.playerSprite.x = player.origX;
     player.playerSprite.y = player.origY;
-    for (i in enemies) {
-        enemies[i].enemySprite.x = enemies[i].origX;
-        enemies[i].enemySprite.y = enemies[i].origY;
+    for (e in enemies) {
+        enemies[e].enemySprite.x = enemies[e].origX;
+        enemies[e].enemySprite.y = enemies[e].origY;
+        enemies[e].state = enemies[e].enemyStates.LEFT;
     }
 }
-

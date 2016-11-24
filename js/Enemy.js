@@ -7,27 +7,39 @@ function Enemy(x, y) {
     this.origY = y;
 
     game.physics.enable(this.enemySprite, Phaser.Physics.ARCADE);
-    this.enemySprite.body.allowGravity = false;
-    this.enemySprite.body.immovable = true;
+    this.enemySprite.body.allowGravity = true;
+    this.enemySprite.body.mass = 0;
+    this.speed = 100;
 
     enemyLayer.add(this.enemySprite);
 
     this.yell = new sound('yell');
 
     this.enemyStates = {
-        PATROL: 0,
-        CHASE: 1,
-        ALERT: 2
+        LEFT: 0,
+        RIGHT: 1,
+        CHASING: 2
     };
-    this.state = this.enemyStates.PATROL;
+    this.state = this.enemyStates.LEFT;
 
-    // this.treeText = game.cache.getText('AITree');
-    // this.tree.load(); // Get info from .JSON file
-    // Import behaviour tree from .JSON file!
-    // Allows me to update AI without going into Code...?
+    this.ai = new AITree(this);
 
     // Add functions below
     this.enemyUpdate = function () {
         // Update
+        this.enemySprite.body.velocity.x = 0;
+        this.ai.treeUpdate();
+
+        game.physics.arcade.collide(this.enemySprite, background);
+        if (game.physics.arcade.overlap(this.enemySprite, stairLayer)) {
+            this.setGravity(false);
+        }
+        else {
+            this.setGravity(true);
+        }
+    }
+
+    this.setGravity = function(gravity) {
+        this.enemySprite.body.allowGravity = gravity;
     }
 }
