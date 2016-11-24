@@ -1,5 +1,5 @@
 ---L---L----
-G-LLL-LLL--E
+--LLL-LLLG-P
 FSFFFFFFFFFF
 -S----L-----
 -S---LLL----
@@ -7,6 +7,6 @@ FSFFFFFFFFFF
 FFFFFFFFFSFF
 -----L---S--
 ----LLL--S--
-P--LLLLL-S--
+E--LLLLL-S--
 FFFFFFFFFFFF
 ------------

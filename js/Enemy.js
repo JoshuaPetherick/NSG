@@ -1,28 +1,56 @@
 
-function enemyInit(x, y, h, w) {
-    var enemy = game.add.sprite(x, y, 'enemy');
-    enemy.anchor.setTo(0, 0);
-    enemy.state = enemyStates.PATROL;
+function Enemy(x, y) {
+    this.enemySprite = game.add.sprite(x, y, 'enemy');
+    this.enemySprite.width = (TileSizeX/2);
+    this.enemySprite.height = TileSizeY;
+    this.origX = x;
+    this.origY = y;
 
-    enemy.origX = x;
-    enemy.origY = y;
-    enemy.height = h;
-    enemy.width = w;
+    game.physics.enable(this.enemySprite, Phaser.Physics.ARCADE);
+    this.enemySprite.body.allowGravity = true;
+    this.enemySprite.body.mass = 0;
+    this.speed = 75;
 
-    foreground.add(enemy);
-    return enemy;
-}
+    foreground.add(this.enemySprite);
 
-function enemyUpdate(enemy) {
-    var speed = 2;
+    this.yell = new sound('yell');
 
-    // Check if colliding with player!
-    if (checkColliding(player, enemy)) {
-        resetLevel();
+    this.enemyStates = {
+        LEFT: 0,
+        RIGHT: 1,
+        CHASING: 2
+    };
+    this.state = this.enemyStates.LEFT;
+
+    this.ai = new AITree(this);
+
+    // Add functions below
+    this.enemyUpdate = function () {
+        // Update
+        this.enemySprite.body.velocity.x = 0;
+        this.ai.treeUpdate();
+
+        game.physics.arcade.collide(this.enemySprite, background);
+        if (game.physics.arcade.collide(this.enemySprite, wallLayer)) {
+            if (this.state == this.enemyStates.LEFT) {
+                this.state = this.enemyStates.RIGHT;
+            }
+            else if (this.state == this.enemyStates.RIGHT) {
+                this.state = this.enemyStates.LEFT;
+            }
+            else {
+                // No idea....
+            }
+        }
+        if (game.physics.arcade.overlap(this.enemySprite, stairLayer)) {
+            this.setGravity(false);
+        }
+        else {
+            this.setGravity(true);
+        }
     }
 
-    //enemy.x = enemy.x - speed;
-    //if (enemy.x <= 0) {
-    //    enemy.x = enemy.x + speed;
-    //}
+    this.setGravity = function(gravity) {
+        this.enemySprite.body.allowGravity = gravity;
+    }
 }

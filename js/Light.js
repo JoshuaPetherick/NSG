@@ -1,13 +1,11 @@
 
-function lightInit(x, y) {
-    // Init
-    var light = game.add.sprite(x, y, 'light');
-    light.anchor.setTo(0.5, 0);
+function Light(x, y) {
+    this.lightSprite = game.add.sprite(x, y, 'light');
+    this.lightSprite.width = TileSizeX;
+    this.lightSprite.height = TileSizeY;
 
-    background.add(light);
-    return light;
-}
-
-function lightUpdate() {
-    // Update
+    game.physics.enable(this.lightSprite, Phaser.Physics.ARCADE);
+    this.lightSprite.body.allowGravity = false;
+    this.lightSprite.body.immovable = true;
+    lightLayer.add(this.lightSprite);
 }

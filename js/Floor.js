@@ -1,16 +1,11 @@
 
-function floorInit(x, y, h, w) {
-    // Init
-    var floor = game.add.sprite(x, y, 'floor');
-    floor.anchor.setTo(0, 0);
+function Floor(x, y) {
+    this.floorSprite = game.add.sprite(x, y, 'floor');
+    this.floorSprite.width = TileSizeX;
+    this.floorSprite.height = TileSizeY;
 
-    floor.height = h;
-    floor.width = w;
-
-    background.add(floor);
-    return floor;
-}
-
-function floorUpdate() {
-    // Update
+    game.physics.enable(this.floorSprite, Phaser.Physics.ARCADE);
+    this.floorSprite.body.allowGravity = false;
+    this.floorSprite.body.immovable = true;
+    background.add(this.floorSprite);
 }

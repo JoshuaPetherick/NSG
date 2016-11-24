@@ -1,18 +1,16 @@
 
-function exitInit(x, y, h, w) {
-    // Init
-    exit = game.add.sprite(x, y, 'exit');
-    exit.anchor.setTo(-0.5, 0);
+function Exit(x, y) {
+    this.exitSprite = game.add.sprite(x, y, 'exit');
+    this.exitSprite.width = (TileSizeX/2);
+    this.exitSprite.height = TileSizeY;
 
-    exit.height = h;
-    exit.width = w;
-    background.add(exit);
-    return exit;
-}
+    game.physics.enable(this.exitSprite, Phaser.Physics.ARCADE);
+    this.exitSprite.body.allowGravity = false;
+    this.exitSprite.body.immovable = true;
+    exitLayer.add(this.exitSprite);
 
-function exitUpdate() {
-    // Update
-    if (checkColliding(player, exit)) {
+    this.exitCollision = function () {
+        // Load new level!
         nextLevel();
     }
 }

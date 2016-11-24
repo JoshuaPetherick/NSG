@@ -7,5 +7,6 @@ F = floor
 S = stairs/ladder
 L = light
 X = light & guard start
-Y = light & player start
+Y = stairs & player start
+Z = light & player start
 - = empty space
