@@ -2,16 +2,17 @@
 // Core-game variables
 var GAMEHEIGHT = 600;
 var GAMEWIDTH = 900;
-var playing_bool = true;
-var level = 1;
 var backgroundMusic;
+var level;
+var timer;
 
 // Phaser draw groups
 var background;
+var wallLayer;
 var lightLayer;
 var stairLayer;
+var foreground;
 var exitLayer;
-var enemyLayer;
 
 // Tile Info
 var TileSizeX;
@@ -20,9 +21,6 @@ var TileSizeY;
 // Sprite Variables
 var player;
 var enemies = []; // Array of Enemies
-var floors = []; // Array of Floors
-var stairs = []; // Array of Ladders
-var lights = []; // Array of Lights
 var buttons = [];
 var exit;
 
@@ -67,7 +65,7 @@ function preload() {
     game.load.audio('background1', 'assets/sounds/background_eerie.mp3');
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
     // Text
-    var maxLvls = 10;
+    var maxLvls = 15;
     for (var i = 1; i <= maxLvls; i++) {
         // Load all level text files!
         game.load.text('level' + i, 'assets/levels/lvl' + i + '.txt')
@@ -102,8 +100,10 @@ function create() {
 
         case gameStates.PLAY:
             game.physics.startSystem(Phaser.Physics.ARCADE);
-            game.physics.arcade.gravity.y = 250;
+            game.physics.arcade.gravity.y = 350;
+            timer = game.time.create(false);
 
+            level = 1;
             var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
             for(i = 0; i < text.length; i++) {
                 text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
@@ -111,40 +111,43 @@ function create() {
             TileSizeY = Math.round(GAMEHEIGHT/text.length);
             TileSizeX = Math.round(GAMEWIDTH/(text[0].length));
 
+            wallLayer = game.add.group();
             lightLayer = game.add.group();
             stairLayer = game.add.group();
             exitLayer = game.add.group();
-            enemyLayer = game.add.group();
+            foreground = game.add.group();
 
             loadLevel(text);
 
             backgroundMusic = new sound('background1');
             backgroundMusic.musicVol(0.75);
             backgroundMusic.musicLoop();
+
+            timer.start();
             break;
     }
 } // create()
 
 function update() {
     //  Change game states and call update for all objects
-    if (playing_bool)
-    {
-        switch(gameState)
-        {
-            case gameStates.PLAY:
-                player.playerInput();
-                player.playerUpdate();
-                for(e in enemies) {
-                    enemies[e].enemyUpdate();
-                }
-                break;
-        }
+    switch(gameState) {
+        case gameStates.PLAY:
+            player.playerInput();
+            player.playerUpdate();
+            for(e in enemies) {
+                enemies[e].enemyUpdate();
+            }
+            break;
     }
 } // update()
 
 function render() {
-    game.debug.text(game.time.fps || '--', 2, 14, '#00ff00'); // Shows FPS
-    game.debug.text(sortTimer(this.game.time.totalElapsedSeconds()), GAMEWIDTH/2, 25);
+    switch(gameState) {
+        case gameStates.PLAY:
+            game.debug.text(game.time.fps || '--', 2, 14, '#00ff00'); // Shows FPS
+            game.debug.text(sortTimer(timer.seconds), GAMEWIDTH / 2, 25);
+            break;
+    }
 } // render()
 
 function loadLevel(text) {
@@ -165,30 +168,34 @@ function loadLevel(text) {
                     break;
 
                 case "F":
-                    floors.push(new Floor((j*TileSizeX), (i*TileSizeY))); // Add new to Array
+                    new Floor((j*TileSizeX), (i*TileSizeY)); // Add new to Array
+                    break;
+
+                case "W":
+                    new Wall((j*TileSizeX), (i*TileSizeY)); // Add new to Array
                     break;
 
                 case "S":
-                    stairs.push(new Stair((j*TileSizeX), (i*TileSizeY))); // Add new to Array
+                    new Stair((j*TileSizeX), (i*TileSizeY)); // Add new to Array
                     break;
 
                 case "L":
-                    lights.push(new Light((j*TileSizeX), (i*TileSizeY))); // Add new to Array
+                    new Light((j*TileSizeX), (i*TileSizeY)); // Add new to Array
                     break;
 
                 case "X":
                     enemies.push(new Enemy((j*TileSizeX), (i*TileSizeY))); // Add new to Array
-                    lights.push(new Light((j*TileSizeX), (i*TileSizeY))); // Add new to Array
+                    new Light((j*TileSizeX), (i*TileSizeY)); // Add new to Array
                     break;
 
                 case "Y":
                     player = new Player((j*TileSizeX), (i*TileSizeY));
-                    stairs.push(new Stair((j*TileSizeX), (i*TileSizeY))); // Add new to Array
+                    new Stair((j*TileSizeX), (i*TileSizeY)); // Add new to Array
                     break;
 
                 case "Z":
                     player = new Player((j*TileSizeX), (i*TileSizeY));
-                    lights.push(new Light((j*TileSizeX), (i*TileSizeY))); // Add new to Array
+                    new Light((j*TileSizeX), (i*TileSizeY)); // Add new to Array
                     break;
 
                 case "E":
@@ -215,23 +222,26 @@ function nextLevel() {
     // Empty arrays
     player = null;
     enemies = [];
-    floors = [];
-    stairs = [];
-    lights = [];
     exit = null;
     // Empty phaser group
     background.removeAll();
+    wallLayer.removeAll();
     lightLayer.removeAll();
     stairLayer.removeAll();
+    foreground.removeAll();
     exitLayer.removeAll();
-    enemyLayer.removeAll();
     // Load next level
     level++;
-    var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
-    for(i = 0; i < text.length; i++) {
-        text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
+    if (level < 16 ) {
+        var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
+        for(i = 0; i < text.length; i++) {
+            text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
+        }
+        loadLevel(text);
     }
-    loadLevel(text);
+    else {
+        gameComplete();
+    }
 }
 
 function resetLevel() {
@@ -242,4 +252,9 @@ function resetLevel() {
         enemies[e].enemySprite.y = enemies[e].origY;
         enemies[e].state = enemies[e].enemyStates.LEFT;
     }
+}
+
+function gameComplete() {
+    gameState = gameStates.SCORE;
+    create();
 }

@@ -9,9 +9,9 @@ function Enemy(x, y) {
     game.physics.enable(this.enemySprite, Phaser.Physics.ARCADE);
     this.enemySprite.body.allowGravity = true;
     this.enemySprite.body.mass = 0;
-    this.speed = 100;
+    this.speed = 75;
 
-    enemyLayer.add(this.enemySprite);
+    foreground.add(this.enemySprite);
 
     this.yell = new sound('yell');
 
@@ -31,6 +31,17 @@ function Enemy(x, y) {
         this.ai.treeUpdate();
 
         game.physics.arcade.collide(this.enemySprite, background);
+        if (game.physics.arcade.collide(this.enemySprite, wallLayer)) {
+            if (this.state == this.enemyStates.LEFT) {
+                this.state = this.enemyStates.RIGHT;
+            }
+            else if (this.state == this.enemyStates.RIGHT) {
+                this.state = this.enemyStates.LEFT;
+            }
+            else {
+                // No idea....
+            }
+        }
         if (game.physics.arcade.overlap(this.enemySprite, stairLayer)) {
             this.setGravity(false);
         }

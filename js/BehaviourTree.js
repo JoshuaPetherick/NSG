@@ -17,11 +17,19 @@ function AITree(enemy) {
     }
 
     this.actions = function(action) {
+        action('EnemyAlert', {
+            tick: function(tick) {
+                var enemy = tick.blackboard.get('pointer');
+                enemy.speed = 125;
+                return b3.SUCCESS;
+            }
+        });
         action('ChasePlayer', {
             tick: function(tick) {
                 console.log('CHASING PLAYER!');
                 var enemy = tick.blackboard.get('pointer');
                 //Algorithm to go towards Player position!
+
                 return b3.SUCCESS;
             }
         });
@@ -46,6 +54,15 @@ function AITree(enemy) {
     }
 
     this.conditions = function(condition) {
+        condition('AlarmTriggered', {
+            tick: function(tick) {
+                var enemy = tick.blackboard.get('pointer');
+                if (player.intel == true) {
+                    return b3.SUCCESS;
+                }
+                return b3.FAILURE;
+            }
+        });
         condition('ChasingPlayer', {
             tick: function(tick) {
                 var enemy = tick.blackboard.get('pointer');
@@ -63,6 +80,7 @@ function AITree(enemy) {
                         && player.playerSprite.x <= enemy.enemySprite.x
                         && player.playerSprite.y == enemy.enemySprite.y) {
                         enemy.state = enemy.enemyStates.CHASING;
+                        enemy.speed = 150;
                         return b3.SUCCESS;
                     }
                 }
