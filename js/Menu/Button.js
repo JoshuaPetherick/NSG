@@ -1,16 +1,17 @@
 
 function button(type) {
+    this.width = 150;
     switch(type) {
         case "PLAY":
-            this.button = game.add.button((GAMEWIDTH/2)-150, (GAMEHEIGHT/2)-200, 'buttonPlay', playClick, this, 1, 0, 1);
+            this.button = game.add.button((GAMEWIDTH/2)-this.width, (GAMEHEIGHT/2)-200, 'buttonPlay', playClick, this, 1, 0, 1);
             break;
 
         case "HIGHSCORE":
-            this.button = game.add.button((GAMEWIDTH/2)-150, (GAMEHEIGHT/2)-75, 'buttonHighscore', highscoreClick, this, 1, 0, 1);
+            this.button = game.add.button((GAMEWIDTH/2)-this.width, (GAMEHEIGHT/2)-75, 'buttonHighscore', highscoreClick, this, 1, 0, 1);
             break;
 
-        case "OPTIONS":
-            this.button = game.add.button((GAMEWIDTH/2)-150, (GAMEHEIGHT/2)+50, 'buttonOption', optionsClick, this, 1, 0, 1);
+        case "BACK":
+            this.button = game.add.button((GAMEWIDTH/2)-this.width, (GAMEHEIGHT/2)+50, 'buttonBack', backClick, this, 1, 0, 1);
             break;
     }
     background.add(this.button);
@@ -23,7 +24,7 @@ function button(type) {
 function playClick() {
     clear();
     gameState = gameStates.PLAY;
-    level = 5; // Reset level!
+    level = 1; // Reset level!
     create();
 }
 
@@ -33,9 +34,9 @@ function highscoreClick() {
     create();
 }
 
-function optionsClick() {
+function backClick() {
     clear();
-    gameState = gameStates.OPTIONS;
+    gameState = gameStates.MENU;
     create();
 }
 
@@ -44,4 +45,5 @@ function clear() {
         buttons[i].destroyButton();
     }
     background.removeAll();
+    buttons = [];
 }

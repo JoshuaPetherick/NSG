@@ -6,7 +6,7 @@
 var GAMEHEIGHT = 600;
 var GAMEWIDTH = 900;
 var backgroundMusic;
-var level = 1;
+var level;
 var timer;
 
 // Phaser draw groups
@@ -32,8 +32,7 @@ var gameState;
 var gameStates = {
     MENU: 0,
     PLAY: 1,
-    SCORE: 2,
-    OPTIONS: 3
+    SCORE: 2
 };
 
 var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Game', {
@@ -55,21 +54,20 @@ function preload() {
     // Start state
     gameState = gameStates.MENU;
     // Images
-    game.load.image('player', 'assets/images/player.png');
-    game.load.image('enemy', 'assets/images/enemy.png');
-    game.load.image('floor', 'assets/images/floor.png');
-    game.load.image('light', 'assets/images/light.png');
-    game.load.image('stairs', 'assets/images/stairs.png');
-    game.load.image('exit', 'assets/images/exit.png');
-    game.load.image('leftArrow', 'assets/images/ArrowLeft.png');
-    game.load.image('rightArrow', 'assets/images/ArrowRight.png');
-    game.load.image('downArrow', 'assets/images/ArrowDown.png');
-    game.load.image('upArrow', 'assets/images/ArrowUp.png');
-    game.load.image('spaceBar', 'assets/images/SpaceBar.png');
+    game.load.image('player', 'assets/images/TestImages/player.png');
+    game.load.image('enemy', 'assets/images/TestImages/enemy.png');
+    game.load.image('floor', 'assets/images/TestImages/floor.png');
+    game.load.image('light', 'assets/images/TestImages/light.png');
+    game.load.image('stairs', 'assets/images/TestImages/stairs.png');
+    game.load.image('exit', 'assets/images/TestImages/exit.png');
+    game.load.image('leftArrow', 'assets/images/Buttons/ArrowLeft.png');
+    game.load.image('rightArrow', 'assets/images/Buttons/ArrowRight.png');
+    game.load.image('downArrow', 'assets/images/Buttons/ArrowDown.png');
+    game.load.image('upArrow', 'assets/images/Buttons/ArrowUp.png');
     // Spritesheets
-    game.load.spritesheet('buttonPlay', 'assets/images/buttonPlay.png', 194, 66);
-    game.load.spritesheet('buttonHighscore', 'assets/images/buttonHighscore.png', 194, 66);
-    game.load.spritesheet('buttonOption', 'assets/images/buttonOption.png', 194, 66);
+    game.load.spritesheet('buttonPlay', 'assets/images/Buttons/buttonPlay.png', 194, 66);
+    game.load.spritesheet('buttonHighscore', 'assets/images/Buttons/buttonHighscore.png', 194, 66);
+    game.load.spritesheet('buttonBack', 'assets/images/Buttons/buttonBack.png', 194, 66);
     // Audio
     game.load.audio('background1', 'assets/sounds/background_eerie.mp3');
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
@@ -92,19 +90,10 @@ function create() {
 
             buttons.push(new button("PLAY"));
             buttons.push(new button("HIGHSCORE"));
-            buttons.push(new button("OPTIONS"));
             break;
 
         case gameStates.SCORE:
-            buttons.push(new button("PLAY"));
-            //buttons.push(new button("HIGHSCORE"));
-            buttons.push(new button("OPTIONS"));
-            break;
-
-        case gameStates.OPTIONS:
-            buttons.push(new button("PLAY"));
-            buttons.push(new button("HIGHSCORE"));
-            //buttons.push(new button("OPTIONS"));
+            buttons.push(new button("BACK"));
             break;
 
         case gameStates.PLAY:
@@ -152,6 +141,12 @@ function update() {
 
 function render() {
     switch(gameState) {
+        case gameStates.SCORE:
+            var score = localStorage.getItem('timerScore');
+            if (!score) { score = 'Uncompleted'; } // If null then add value!
+            game.debug.text('Your highest score is: ' + score, (GAMEWIDTH/2)-200, (GAMEHEIGHT/2)-20); // Prints Timer
+            break;
+
         case gameStates.PLAY:
             game.debug.text(game.time.fps || '--', 2, 14, '#00ff00'); // Prints FPS
             game.debug.text(sortTimer(timer.seconds), GAMEWIDTH / 2, 25); // Prints Timer
@@ -259,13 +254,17 @@ function resetLevel() {
         enemies[e].state = enemies[e].enemyStates.LEFT;
         enemies[e].enemySprite.x = enemies[e].origX;
         enemies[e].enemySprite.y = enemies[e].origY;
-        enemies[e].speed = 75;
+        enemies[e].speed = enemies[e].baseSpeed ;
     }
     player.playerSprite.x = player.origX;
     player.playerSprite.y = player.origY;
 }
 
 function gameComplete() {
+    timer.pause(); // Pause
+    localStorage.setItem('timerScore', sortTimer(timer.seconds)); // Store local time score for player
+    timer.stop(); // Kill timer off
+
     gameState = gameStates.SCORE;
     create();
 }
