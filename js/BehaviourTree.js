@@ -26,17 +26,33 @@ function AITree(enemy) {
         });
         action('ChasePlayer', {
             tick: function(tick) {
-                console.log('CHASING PLAYER!');
                 var enemy = tick.blackboard.get('pointer');
-                //Algorithm to go towards Player position!
+                enemy.enemySprite.body.velocity.x = 0;
 
+                if (player.playerSprite.x <= enemy.enemySprite.x ) {
+                    enemy.enemySprite.body.velocity.x = -enemy.speed;
+                }
+                else {
+                    enemy.enemySprite.body.velocity.x = enemy.speed;
+                }
+                if (player.playerSprite.y < enemy.enemySprite.y
+                    || player.playerSprite.y > enemy.enemySprite.y) {
+                    if (game.physics.arcade.overlap(enemy.enemySprite, stairLayer)) {
+                        if (player.playerSprite.y < enemy.enemySprite.y) {
+                            enemy.enemySprite.body.velocity.y = -enemy.speed;
+                        }
+                        else {
+                            enemy.enemySprite.body.velocity.y = enemy.speed;
+                        }
+                    }
+                }
                 return b3.SUCCESS;
             }
         });
         action('Patrol', {
             tick: function(tick) {
                 var enemy = tick.blackboard.get('pointer');
-                if(enemy.state == enemy.enemyStates.LEFT) {
+                if(enemy.state === enemy.enemyStates.LEFT) {
                     enemy.enemySprite.body.velocity.x = -enemy.speed;
                     if (enemy.enemySprite.x < 0 ) {
                         enemy.state = enemy.enemyStates.RIGHT;
@@ -57,7 +73,7 @@ function AITree(enemy) {
         condition('AlarmTriggered', {
             tick: function(tick) {
                 var enemy = tick.blackboard.get('pointer');
-                if (player.gotIntel == true) {
+                if (player.gotIntel === true) {
                     return b3.SUCCESS;
                 }
                 return b3.FAILURE;
@@ -66,7 +82,7 @@ function AITree(enemy) {
         condition('ChasingPlayer', {
             tick: function(tick) {
                 var enemy = tick.blackboard.get('pointer');
-                if (enemy.state == enemy.enemyStates.CHASING) {
+                if (enemy.state === enemy.enemyStates.CHASING) {
                     return b3.SUCCESS;
                 }
                 return b3.FAILURE;
@@ -75,20 +91,23 @@ function AITree(enemy) {
         condition('SeePlayer', {
             tick: function(tick) {
                 var enemy = tick.blackboard.get('pointer');
-                if(enemy.state == enemy.enemyStates.LEFT) {
-                    if(player.state == player.playerStates.LIGHT
+                if(enemy.state === enemy.enemyStates.LEFT) {
+                    if(player.state === player.playerStates.LIGHT
                         && player.playerSprite.x <= enemy.enemySprite.x
-                        && player.playerSprite.y == enemy.enemySprite.y) {
+                        && player.playerSprite.y === enemy.enemySprite.y) {
                         enemy.state = enemy.enemyStates.CHASING;
                         enemy.speed = 150;
+                        enemy.yell.musicPlay();
                         return b3.SUCCESS;
                     }
                 }
                 else {
-                    if(player.state == player.playerStates.LIGHT
+                    if(player.state === player.playerStates.LIGHT
                         && player.playerSprite.x >= enemy.enemySprite.x
-                        && player.playerSprite.y == enemy.enemySprite.y) {
+                        && player.playerSprite.y === enemy.enemySprite.y) {
                         enemy.state = enemy.enemyStates.CHASING;
+                        enemy.speed = 150;
+                        enemy.yell.musicPlay();
                         return b3.SUCCESS;
                     }
                 }

@@ -41,6 +41,12 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Ga
 });
 
 function preload() {
+    if (window.screen.availHeight < GAMEHEIGHT || window.screen.availWidth < GAMEWIDTH) {
+        // Adjust for smaller screens
+        GAMEHEIGHT = GAMEHEIGHT/2;
+        GAMEWIDTH = GAMEWIDTH/2;
+        // Need to scale down somehow...?
+    }
     console.log('Phaser Version: ' + Phaser.VERSION);
     console.log('B3 Version: ' + b3.VERSION);
     // Start state
@@ -245,13 +251,14 @@ function nextLevel() {
 }
 
 function resetLevel() {
-    player.playerSprite.x = player.origX;
-    player.playerSprite.y = player.origY;
     for (e in enemies) {
+        enemies[e].state = enemies[e].enemyStates.LEFT;
         enemies[e].enemySprite.x = enemies[e].origX;
         enemies[e].enemySprite.y = enemies[e].origY;
-        enemies[e].state = enemies[e].enemyStates.LEFT;
+        enemies[e].speed = 75;
     }
+    player.playerSprite.x = player.origX;
+    player.playerSprite.y = player.origY;
 }
 
 function gameComplete() {

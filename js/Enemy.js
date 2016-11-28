@@ -31,15 +31,13 @@ function Enemy(x, y) {
         this.ai.treeUpdate();
 
         game.physics.arcade.collide(this.enemySprite, background);
+        // Turn around if colliding with a wall!
         if (game.physics.arcade.collide(this.enemySprite, wallLayer)) {
-            if (this.state == this.enemyStates.LEFT) {
+            if (this.state === this.enemyStates.LEFT) {
                 this.state = this.enemyStates.RIGHT;
             }
-            else if (this.state == this.enemyStates.RIGHT) {
+            else if (this.state === this.enemyStates.RIGHT) {
                 this.state = this.enemyStates.LEFT;
-            }
-            else {
-                // No idea....
             }
         }
         if (game.physics.arcade.overlap(this.enemySprite, stairLayer)) {
@@ -47,6 +45,9 @@ function Enemy(x, y) {
         }
         else {
             this.setGravity(true);
+        }
+        if (!this.enemySprite.body.allowGravity) {
+            //this.enemySprite.body.velocity.y = 0;
         }
     }
 
