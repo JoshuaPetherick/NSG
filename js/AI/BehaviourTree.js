@@ -20,7 +20,7 @@ function AITree(enemy) {
         action('EnemyAlert', {
             tick: function(tick) {
                 var enemy = tick.blackboard.get('pointer');
-                enemy.speed = 125;
+                enemy.speed = this.baseSpeed + Math.round(this.baseSpeed/4); // Increase speed by a quarter!
                 return b3.SUCCESS;
             }
         });
@@ -29,20 +29,22 @@ function AITree(enemy) {
                 var enemy = tick.blackboard.get('pointer');
                 enemy.enemySprite.body.velocity.x = 0;
 
-                if (player.playerSprite.x <= enemy.enemySprite.x ) {
+                // Handles moving Left & Right
+                if (player.playerSprite.x < enemy.enemySprite.x ) {
                     enemy.enemySprite.body.velocity.x = -enemy.speed;
                 }
-                else {
+                else if (player.playerSprite.x > enemy.enemySprite.x) {
                     enemy.enemySprite.body.velocity.x = enemy.speed;
                 }
-                if (player.playerSprite.y < enemy.enemySprite.y
-                    || player.playerSprite.y > enemy.enemySprite.y) {
+                // Handles moving Up or Down
+                if (player.playerSprite.y != enemy.enemySprite.y) {
+                    // Check if player above or below AI
                     if (game.physics.arcade.overlap(enemy.enemySprite, stairLayer)) {
                         if (player.playerSprite.y < enemy.enemySprite.y) {
-                            enemy.enemySprite.body.velocity.y = -enemy.speed;
+                            enemy.enemySprite.body.velocity.y = -enemy.speed/2; // Move at half speed
                         }
                         else {
-                            enemy.enemySprite.body.velocity.y = enemy.speed;
+                            enemy.enemySprite.body.velocity.y = enemy.speed/2; // Move at half speed
                         }
                     }
                 }
@@ -96,7 +98,7 @@ function AITree(enemy) {
                         && player.playerSprite.x <= enemy.enemySprite.x
                         && player.playerSprite.y === enemy.enemySprite.y) {
                         enemy.state = enemy.enemyStates.CHASING;
-                        enemy.speed = 150;
+                        enemy.speed = enemy.baseSpeed*2;
                         enemy.yell.musicPlay();
                         return b3.SUCCESS;
                     }
@@ -106,7 +108,7 @@ function AITree(enemy) {
                         && player.playerSprite.x >= enemy.enemySprite.x
                         && player.playerSprite.y === enemy.enemySprite.y) {
                         enemy.state = enemy.enemyStates.CHASING;
-                        enemy.speed = 150;
+                        enemy.speed = enemy.baseSpeed*2;
                         enemy.yell.musicPlay();
                         return b3.SUCCESS;
                     }
@@ -117,10 +119,11 @@ function AITree(enemy) {
     }
 
     this.treeInit = function(action, condition) {
+        // Initalise custom actions & conditions
         this.actions(action);
         this.conditions(condition);
     }
-
+    // Constructor:
     this.treeInit(this.loadAction, this.loadCondition);
 
     this.ai = {'guy': new b3.BehaviorTree()};
@@ -129,7 +132,6 @@ function AITree(enemy) {
     this.character = {
         memory:  new b3.Blackboard()
     };
-    this.character.memory.set('name', 'Enemy');
     this.character.memory.set('pointer', enemy);
 }
 

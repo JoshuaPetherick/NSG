@@ -1,9 +1,12 @@
+// Designed and Created by: Joshua Petherick
+// Project started on: 24/10/2016
+// Last Updated: 28/11/2016
 
 // Core-game variables
 var GAMEHEIGHT = 600;
 var GAMEWIDTH = 900;
 var backgroundMusic;
-var level;
+var level = 1;
 var timer;
 
 // Phaser draw groups
@@ -21,7 +24,7 @@ var TileSizeY;
 // Sprite Variables
 var player;
 var enemies = []; // Array of Enemies
-var buttons = [];
+var buttons = []; // Array of Menu buttons
 var exit;
 
 // State variables
@@ -105,15 +108,15 @@ function create() {
             break;
 
         case gameStates.PLAY:
-            game.physics.startSystem(Phaser.Physics.ARCADE);
+            game.physics.startSystem(Phaser.Physics.ARCADE); // ARCADE physics as fits game best
             game.physics.arcade.gravity.y = 350;
             timer = game.time.create(false);
 
-            level = 1;
             var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
             for(i = 0; i < text.length; i++) {
                 text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
             }
+
             TileSizeY = Math.round(GAMEHEIGHT/text.length);
             TileSizeX = Math.round(GAMEWIDTH/(text[0].length));
 
@@ -125,11 +128,11 @@ function create() {
 
             loadLevel(text);
 
-            backgroundMusic = new sound('background1');
+            backgroundMusic = new sound('background1'); // Background music, open to update
             backgroundMusic.musicVol(0.75);
             backgroundMusic.musicLoop();
 
-            timer.start();
+            timer.start(); // Timer to begin starts last!
             break;
     }
 } // create()
@@ -138,10 +141,10 @@ function update() {
     //  Change game states and call update for all objects
     switch(gameState) {
         case gameStates.PLAY:
-            player.playerInput();
-            player.playerUpdate();
+            player.playerInput(); // Check input
+            player.playerUpdate(); // Update player collisions, etc
             for(e in enemies) {
-                enemies[e].enemyUpdate();
+                enemies[e].enemyUpdate(); // Update enemy AI, collision, etc
             }
             break;
     }
@@ -150,8 +153,8 @@ function update() {
 function render() {
     switch(gameState) {
         case gameStates.PLAY:
-            game.debug.text(game.time.fps || '--', 2, 14, '#00ff00'); // Shows FPS
-            game.debug.text(sortTimer(timer.seconds), GAMEWIDTH / 2, 25);
+            game.debug.text(game.time.fps || '--', 2, 14, '#00ff00'); // Prints FPS
+            game.debug.text(sortTimer(timer.seconds), GAMEWIDTH / 2, 25); // Prints Timer
             break;
     }
 } // render()
@@ -162,11 +165,12 @@ function loadLevel(text) {
         // For each Character in Line  -  Determines X
         for (j = 0; j < text[i].length; j++) {
             // Initialise based on character in txt file
+            var x = (j*TileSizeX); // X based on position in txt file
+            var y = (i*TileSizeY); // Y based on position in txt file
             switch (text[i].charAt(j)) {
                 // Optimise the below: Maybe merge into a function (Reads file and returns x&y position)
-
                 case "P":
-                    player = new Player((j*TileSizeX), (i*TileSizeY));
+                    player = new Player(x, y);
                     break;
 
                 case "G":
@@ -174,38 +178,38 @@ function loadLevel(text) {
                     break;
 
                 case "F":
-                    new Floor((j*TileSizeX), (i*TileSizeY)); // Add new to Array
+                    new Floor(x, y); // Add new to Array
                     break;
 
                 case "W":
-                    new Wall((j*TileSizeX), (i*TileSizeY)); // Add new to Array
+                    new Wall(x, y); // Add new to Array
                     break;
 
                 case "S":
-                    new Stair((j*TileSizeX), (i*TileSizeY)); // Add new to Array
+                    new Stair(x, y); // Add new to Array
                     break;
 
                 case "L":
-                    new Light((j*TileSizeX), (i*TileSizeY)); // Add new to Array
+                    new Light(x, y); // Add new to Array
                     break;
 
                 case "X":
-                    enemies.push(new Enemy((j*TileSizeX), (i*TileSizeY))); // Add new to Array
-                    new Light((j*TileSizeX), (i*TileSizeY)); // Add new to Array
+                    enemies.push(new Enemy(x, y)); // Add new to Array
+                    new Light(x, y); // Add new to Array
                     break;
 
                 case "Y":
-                    player = new Player((j*TileSizeX), (i*TileSizeY));
-                    new Stair((j*TileSizeX), (i*TileSizeY)); // Add new to Array
+                    player = new Player(x, y);
+                    new Stair(x, y); // Add new to Array
                     break;
 
                 case "Z":
-                    player = new Player((j*TileSizeX), (i*TileSizeY));
-                    new Light((j*TileSizeX), (i*TileSizeY)); // Add new to Array
+                    player = new Player(x, y);
+                    new Light(x, y); // Add new to Array
                     break;
 
                 case "E":
-                    exit = new Exit((j*TileSizeX), (i*TileSizeY));
+                    exit = new Exit(x, y);
                     break;
             }
         }

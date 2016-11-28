@@ -23,21 +23,19 @@ function button(type) {
 function playClick() {
     clear();
     gameState = gameStates.PLAY;
-    console.log("PLAY!");
+    level = 5; // Reset level!
     create();
 }
 
 function highscoreClick() {
     clear();
     gameState = gameStates.SCORE;
-    console.log("SCORE!");
     create();
 }
 
 function optionsClick() {
     clear();
     gameState = gameStates.OPTIONS;
-    console.log("OPTIONS!");
     create();
 }
 

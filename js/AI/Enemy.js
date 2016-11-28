@@ -9,7 +9,8 @@ function Enemy(x, y) {
     game.physics.enable(this.enemySprite, Phaser.Physics.ARCADE);
     this.enemySprite.body.allowGravity = true;
     this.enemySprite.body.mass = 0;
-    this.speed = 75;
+    this.baseSpeed = 75; // Base speed required as it gets updated by Behaviour tree
+    this.speed = this.baseSpeed;
 
     foreground.add(this.enemySprite);
 
@@ -28,6 +29,7 @@ function Enemy(x, y) {
     this.enemyUpdate = function () {
         // Update
         this.enemySprite.body.velocity.x = 0;
+        //this.enemySprite.body.velocity.y = 0;
         this.ai.treeUpdate();
 
         game.physics.arcade.collide(this.enemySprite, background);
@@ -45,9 +47,6 @@ function Enemy(x, y) {
         }
         else {
             this.setGravity(true);
-        }
-        if (!this.enemySprite.body.allowGravity) {
-            //this.enemySprite.body.velocity.y = 0;
         }
     }
 

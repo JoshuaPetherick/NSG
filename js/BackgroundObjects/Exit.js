@@ -1,7 +1,7 @@
 
 function Exit(x, y) {
     this.exitSprite = game.add.sprite(x, y, 'exit');
-    this.exitSprite.width = (TileSizeX/2);
+    this.exitSprite.width = TileSizeX;
     this.exitSprite.height = TileSizeY;
 
     game.physics.enable(this.exitSprite, Phaser.Physics.ARCADE);
