@@ -17,13 +17,6 @@ function AITree(enemy) {
     }
 
     this.actions = function(action) {
-        action('EnemyAlert', {
-            tick: function(tick) {
-                var enemy = tick.blackboard.get('pointer');
-                enemy.speed = this.baseSpeed + Math.round(this.baseSpeed/4); // Increase speed by a quarter!
-                return b3.SUCCESS;
-            }
-        });
         action('ChasePlayer', {
             tick: function(tick) {
                 var enemy = tick.blackboard.get('pointer');
@@ -72,15 +65,6 @@ function AITree(enemy) {
     }
 
     this.conditions = function(condition) {
-        condition('AlarmTriggered', {
-            tick: function(tick) {
-                var enemy = tick.blackboard.get('pointer');
-                if (player.gotIntel === true) {
-                    return b3.SUCCESS;
-                }
-                return b3.FAILURE;
-            }
-        });
         condition('ChasingPlayer', {
             tick: function(tick) {
                 var enemy = tick.blackboard.get('pointer');

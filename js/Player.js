@@ -49,6 +49,11 @@ function Player(x, y) {
     this.state = this.playerStates.DARK;
     foreground.add(this.playerSprite);
 
+    playerDied.addSignal(function () {
+        player.playerSprite.x = player.origX;
+        player.playerSprite.y = player.origY;
+    });
+
     // Add functions below
     this.playerInput = function() {
         this.playerSprite.body.velocity.x = 0; // Empty velocity so not sliding left/right
@@ -81,31 +86,6 @@ function Player(x, y) {
 
     this.playerUpdate = function () {
         // Update
-        game.physics.arcade.collide(player.playerSprite, wallLayer) // Checks if player is colliding with Walls
-        if (game.physics.arcade.overlap(this.playerSprite, exitLayer)) {
-            // Check if player has collidied with exit, if so progress to next level
-            exit.exitCollision();
-        }
-        for (e in enemies) {
-            if (game.physics.arcade.overlap(this.playerSprite, enemies[e].enemySprite)) {
-                // For each enemy, check if overlapping, if so then reset level
-                resetLevel();
-            }
-        }
-        if (game.physics.arcade.overlap(this.playerSprite, lightLayer)) {
-            // If overlapping with LIGHT then change state
-            this.state = this.playerStates.LIGHT;
-        }
-        else {
-            this.state = this.playerStates.DARK;
-        }
-        if (game.physics.arcade.overlap(this.playerSprite, stairLayer)) {
-            // If overlapping with STAIR then no gravity, so can climb up/down
-            this.setGravity(false);
-        }
-        else {
-            this.setGravity(true);
-        }
     }
 
     this.setGravity = function(gravity) {

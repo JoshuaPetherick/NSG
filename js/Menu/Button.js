@@ -24,7 +24,6 @@ function button(type) {
 function playClick() {
     clear();
     gameState = gameStates.PLAY;
-    level = 1; // Reset level!
     create();
 }
 

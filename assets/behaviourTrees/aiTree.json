@@ -1,13 +1,13 @@
 {
-    "title": "EnemyAI",
-    "description": "Tree for Enemy AI",
-    "root": "84a67a14-37f5-4fff-81b7-571ac5efe051",
+    "title": "A Behavior Tree",
+    "description": "",
+    "root": "91f73fd1-95c0-4f00-922f-02e4dc056562",
     "display": {
         "camera_x": 906,
         "camera_y": 455,
-        "camera_z": 1.25,
-        "x": -320,
-        "y": 16
+        "camera_z": 0.5,
+        "x": -224,
+        "y": 160
     },
     "properties": {},
     "nodes": {
@@ -119,90 +119,6 @@
             },
             "parameters": {},
             "properties": {}
-        },
-        "95f22245-98b1-4da4-8caa-dd5820c67768": {
-            "id": "95f22245-98b1-4da4-8caa-dd5820c67768",
-            "name": "Sequence",
-            "title": "Sequence",
-            "description": "",
-            "display": {
-                "x": 0,
-                "y": -192
-            },
-            "parameters": {},
-            "properties": {},
-            "children": [
-                "85aa696d-b2aa-4c03-8ebf-89e33d55ad18",
-                "58f94501-625a-4df6-a788-2da480391063"
-            ]
-        },
-        "85aa696d-b2aa-4c03-8ebf-89e33d55ad18": {
-            "id": "85aa696d-b2aa-4c03-8ebf-89e33d55ad18",
-            "name": "AlarmTriggered",
-            "title": "AlarmTriggered",
-            "description": "",
-            "display": {
-                "x": 160,
-                "y": -224
-            },
-            "parameters": {},
-            "properties": {}
-        },
-        "58f94501-625a-4df6-a788-2da480391063": {
-            "id": "58f94501-625a-4df6-a788-2da480391063",
-            "name": "EnemyAlert",
-            "title": "EnemyAlert",
-            "description": "",
-            "display": {
-                "x": 160,
-                "y": -160
-            },
-            "parameters": {},
-            "properties": {}
-        },
-        "84a67a14-37f5-4fff-81b7-571ac5efe051": {
-            "id": "84a67a14-37f5-4fff-81b7-571ac5efe051",
-            "name": "Sequence",
-            "title": "Sequence",
-            "description": "",
-            "display": {
-                "x": -224,
-                "y": 16
-            },
-            "parameters": {},
-            "properties": {},
-            "children": [
-                "a7936131-4fbe-464b-a69e-290ba35b2d1c",
-                "91f73fd1-95c0-4f00-922f-02e4dc056562"
-            ]
-        },
-        "c353a34c-74de-4da6-8836-b74a40076662": {
-            "id": "c353a34c-74de-4da6-8836-b74a40076662",
-            "name": "Succeeder",
-            "title": "Succeeder",
-            "description": "",
-            "display": {
-                "x": 64,
-                "y": -96
-            },
-            "parameters": {},
-            "properties": {}
-        },
-        "a7936131-4fbe-464b-a69e-290ba35b2d1c": {
-            "id": "a7936131-4fbe-464b-a69e-290ba35b2d1c",
-            "name": "Priority",
-            "title": "Priority",
-            "description": "",
-            "display": {
-                "x": -96,
-                "y": -144
-            },
-            "parameters": {},
-            "properties": {},
-            "children": [
-                "95f22245-98b1-4da4-8caa-dd5820c67768",
-                "c353a34c-74de-4da6-8836-b74a40076662"
-            ]
         }
     },
     "custom_nodes": [
@@ -224,16 +140,6 @@
         {
             "name": "Patrol",
             "title": "Patrol",
-            "category": "action"
-        },
-        {
-            "name": "AlarmTriggered",
-            "title": "AlarmTriggered",
-            "category": "condition"
-        },
-        {
-            "name": "EnemyAlert",
-            "title": "EnemyAlert",
             "category": "action"
         }
     ]

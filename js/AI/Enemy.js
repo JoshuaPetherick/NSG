@@ -21,8 +21,7 @@ function Enemy(x, y) {
         RIGHT: 1,
         CHASING: 2
     };
-    this.state = this.enemyStates.LEFT;
-
+    this.state = this.enemyStates.RIGHT;
     this.ai = new AITree(this);
 
     // Add functions below
@@ -53,4 +52,22 @@ function Enemy(x, y) {
     this.setGravity = function(gravity) {
         this.enemySprite.body.allowGravity = gravity;
     }
+
+    this.resetPos = function() {
+        this.state = this.enemyStates.RIGHT;
+        this.enemySprite.x = this.origX;
+        this.enemySprite.y = this.origY;
+        this.speed = this.baseSpeed;
+    }
+
+    playerDied.addSignal(function() {
+        for (e in enemies) {
+            enemies[e].resetPos();
+        }
+    });
+    getIntel.addSignal(function() {
+        for (e in enemies) {
+            enemies[e].speed = enemies[e].baseSpeed + Math.round(enemies[e].baseSpeed/4); // Increase speed by a quarter!
+        }
+    });
 }

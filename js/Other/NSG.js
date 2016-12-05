@@ -1,6 +1,6 @@
 // Designed and Created by: Joshua Petherick
 // Project started on: 24/10/2016
-// Last Updated: 28/11/2016
+// Last Updated: 05/12/2016
 
 // Core-game variables
 var GAMEHEIGHT = 600;
@@ -25,6 +25,7 @@ var TileSizeY;
 var player;
 var enemies = []; // Array of Enemies
 var buttons = []; // Array of Menu buttons
+var intel;
 var exit;
 
 // State variables
@@ -34,6 +35,11 @@ var gameStates = {
     PLAY: 1,
     SCORE: 2
 };
+
+// Signals
+var playerDied; // https://phaser.io/docs/2.6.2/Phaser.Signal.html
+var newLevel;
+var getIntel;
 
 var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Game', {
     preload: preload,
@@ -101,6 +107,7 @@ function create() {
             game.physics.arcade.gravity.y = 350;
             timer = game.time.create(false);
 
+            level = 8; // Reset level every create!
             var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
             for(i = 0; i < text.length; i++) {
                 text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
@@ -114,6 +121,16 @@ function create() {
             stairLayer = game.add.group();
             exitLayer = game.add.group();
             foreground = game.add.group();
+
+            playerDied = new Signal();
+
+            newLevel = new Signal();
+            newLevel.addSignal(nextLevel)
+
+            getIntel = new Signal();
+            getIntel.addSignal (function() {
+                exit = new Exit(player.origX, player.origY);
+            })
 
             loadLevel(text);
 
@@ -131,7 +148,8 @@ function update() {
     switch(gameState) {
         case gameStates.PLAY:
             player.playerInput(); // Check input
-            player.playerUpdate(); // Update player collisions, etc
+            player.playerUpdate(); // Update Player
+            handleCollision(); // Handle all collisions
             for(e in enemies) {
                 enemies[e].enemyUpdate(); // Update enemy AI, collision, etc
             }
@@ -140,10 +158,11 @@ function update() {
 } // update()
 
 function render() {
+    //game.debug.text.clean;
     switch(gameState) {
         case gameStates.SCORE:
             var score = localStorage.getItem('timerScore');
-            if (!score) { score = 'Uncompleted'; } // If null then add value!
+            if (!score) { score = '0:00'; } // If null then add value!
             game.debug.text('Your highest score is: ' + score, (GAMEWIDTH/2)-200, (GAMEHEIGHT/2)-20); // Prints Timer
             break;
 
@@ -203,6 +222,10 @@ function loadLevel(text) {
                     new Light(x, y); // Add new to Array
                     break;
 
+                case "I":
+                    intel = new Intel(x, y);
+                    break;
+
                 case "E":
                     exit = new Exit(x, y);
                     break;
@@ -221,6 +244,40 @@ function sortTimer(time) {
         secs = "0" + secs;
     }
     return mins + ":" + secs;
+}
+
+function handleCollision () {
+    game.physics.arcade.collide(player.playerSprite, wallLayer); // Checks if player is colliding with Walls
+    if (game.physics.arcade.overlap(player.playerSprite, exitLayer)) {
+        // Check if player has collidied with exit, if so progress to next level
+        newLevel.call();
+    }
+    for (e in enemies) {
+        if (game.physics.arcade.overlap(player.playerSprite, enemies[e].enemySprite)) {
+            // For each enemy, check if overlapping, if so then reset level
+            playerDied.call();
+        }
+    }
+    if (game.physics.arcade.overlap(player.playerSprite, lightLayer)) {
+        // If overlapping with LIGHT then change state
+        player.state = player.playerStates.LIGHT;
+    }
+    else {
+        player.state = player.playerStates.DARK;
+    }
+    if (game.physics.arcade.overlap(player.playerSprite, stairLayer)) {
+        // If overlapping with STAIR then no gravity, so can climb up/down
+        player.setGravity(false);
+    }
+    else {
+        player.setGravity(true);
+    }
+    if (intel) {
+        if (game.physics.arcade.overlap(player.playerSprite, intel.intelSprite)) {
+            player.gotIntel = true;
+            getIntel.call();
+        }
+    }
 }
 
 function nextLevel() {
@@ -247,17 +304,6 @@ function nextLevel() {
     else {
         gameComplete();
     }
-}
-
-function resetLevel() {
-    for (e in enemies) {
-        enemies[e].state = enemies[e].enemyStates.LEFT;
-        enemies[e].enemySprite.x = enemies[e].origX;
-        enemies[e].enemySprite.y = enemies[e].origY;
-        enemies[e].speed = enemies[e].baseSpeed ;
-    }
-    player.playerSprite.x = player.origX;
-    player.playerSprite.y = player.origY;
 }
 
 function gameComplete() {
