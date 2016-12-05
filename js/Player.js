@@ -1,5 +1,6 @@
 
 function Player(x, y) {
+    // Init
     this.playerSprite = game.add.sprite(x, y, 'player');
     this.playerSprite.width = (TileSizeX/2);
     this.playerSprite.height = TileSizeY;
@@ -7,10 +8,14 @@ function Player(x, y) {
     this.origX = x; // Set origin so can restart level!
     this.origY = y;
 
+    // Physics
     game.physics.enable(this.playerSprite, Phaser.Physics.ARCADE);
     this.playerSprite.body.collideWorldBounds = true; // Thou shall never leave this world!
     this.playerSprite.body.mass = 0; // Remove mass so doesn't push other objects down...
     this.speed = 100; // Set base speed here!
+
+    // Animations
+    this.climbAnimation = this.playerSprite.animations.add('Climb', Phaser.Animation.generateFrameNames('Climb_', 0, 9, '', 3));
 
     // Handle button input
     this.leftKey = false;
@@ -54,6 +59,10 @@ function Player(x, y) {
         player.playerSprite.y = player.origY;
     });
 
+    getIntel.addSignal(function () {
+        player.gotIntel = true;
+    });
+
     // Add functions below
     this.playerInput = function() {
         this.playerSprite.body.velocity.x = 0; // Empty velocity so not sliding left/right
@@ -75,11 +84,17 @@ function Player(x, y) {
         if (this.upKey) {
             if (!this.playerSprite.body.allowGravity) {
                 this.playerSprite.body.velocity.y = -this.speed; // Move up
+                if (!this.climbAnimation.isPlaying) {
+                    this.climbAnimation.play();
+                }
             }
         }
         if (this.downKey) {
             if (!this.playerSprite.body.allowGravity) {
                 this.playerSprite.body.velocity.y = this.speed; // Move down
+                if (!this.climbAnimation.isPlaying) {
+                    this.climbAnimation.play();
+                }
             }
         }
     }

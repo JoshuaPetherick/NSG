@@ -60,7 +60,7 @@ function preload() {
     // Start state
     gameState = gameStates.MENU;
     // Images
-    game.load.image('player', 'assets/images/TestImages/player.png');
+    //game.load.image('player', 'assets/images/TestImages/player.png');
     game.load.image('enemy', 'assets/images/TestImages/enemy.png');
     game.load.image('floor', 'assets/images/TestImages/floor.png');
     game.load.image('light', 'assets/images/TestImages/light.png');
@@ -74,6 +74,8 @@ function preload() {
     game.load.spritesheet('buttonPlay', 'assets/images/Buttons/buttonPlay.png', 194, 66);
     game.load.spritesheet('buttonHighscore', 'assets/images/Buttons/buttonHighscore.png', 194, 66);
     game.load.spritesheet('buttonBack', 'assets/images/Buttons/buttonBack.png', 194, 66);
+    // Other
+    game.load.atlasXML('player', 'assets/images/Player/playerSpriteSheet.png', 'assets/images/Player/playerSpriteSheetTest.xml');
     // Audio
     game.load.audio('background1', 'assets/sounds/background_eerie.mp3');
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
@@ -107,7 +109,7 @@ function create() {
             game.physics.arcade.gravity.y = 350;
             timer = game.time.create(false);
 
-            level = 8; // Reset level every create!
+            level = 1; // Reset level for every create!
             var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
             for(i = 0; i < text.length; i++) {
                 text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
@@ -274,7 +276,6 @@ function handleCollision () {
     }
     if (intel) {
         if (game.physics.arcade.overlap(player.playerSprite, intel.intelSprite)) {
-            player.gotIntel = true;
             getIntel.call();
         }
     }
