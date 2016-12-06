@@ -15,7 +15,19 @@ function Player(x, y) {
     this.speed = 100; // Set base speed here!
 
     // Animations
+    this.idleAnimation = this.playerSprite.animations.add('Idle', Phaser.Animation.generateFrameNames('Idle_', 0, 9, '', 3));
+    this.idleAnimation.speed = 20
+
+    this.walkAnimation = this.playerSprite.animations.add('Walk', Phaser.Animation.generateFrameNames('Run_', 0, 9, '', 3));
+    this.walkAnimation.speed = 10;
+
+    this.jumpAnimation = this.playerSprite.animations.add('Jump', Phaser.Animation.generateFrameNames('Jump_', 0, 9, '', 3));
+    this.jumpAnimation.speed = 10;
+
     this.climbAnimation = this.playerSprite.animations.add('Climb', Phaser.Animation.generateFrameNames('Climb_', 0, 9, '', 3));
+    this.climbAnimation.speed = 10;
+
+    this.deathAnimation = this.playerSprite.animations.add('Death', Phaser.Animation.generateFrameNames('Dead_', 0, 9, '', 3));
 
     // Handle button input
     this.leftKey = false;
@@ -66,6 +78,7 @@ function Player(x, y) {
     // Add functions below
     this.playerInput = function() {
         this.playerSprite.body.velocity.x = 0; // Empty velocity so not sliding left/right
+        //this.playerSprite.scale.x *= -1;
         if (!this.playerSprite.body.allowGravity) {
             this.playerSprite.body.velocity.y = 0; // Empty velocity so not sliding up/down
         }
@@ -73,18 +86,35 @@ function Player(x, y) {
         if (game.physics.arcade.collide(player.playerSprite, background)) {
             if (this.upKey) {
                 this.playerSprite.body.velocity.y = -this.speed; // Jump up
+                this.stopAnimations();
+                this.jumpAnimation.play();
             }
         }
         if (this.leftKey) {
             this.playerSprite.body.velocity.x = -this.speed; // Move left
+            if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying) {
+                if (this.playerSprite.width > 0) { // Flip image vertically (Face Left)
+                    this.playerSprite.scale.x *= -1;
+                }
+                this.stopAnimations();
+                this.walkAnimation.play();
+            }
         }
         if (this.rightKey) {
             this.playerSprite.body.velocity.x = this.speed; // Move right
+            if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying) {
+                if (this.playerSprite.width < 0) { // Flip image vertically (Face Right)
+                    this.playerSprite.scale.x *= -1;
+                }
+                this.stopAnimations();
+                this.walkAnimation.play();
+            }
         }
         if (this.upKey) {
             if (!this.playerSprite.body.allowGravity) {
                 this.playerSprite.body.velocity.y = -this.speed; // Move up
                 if (!this.climbAnimation.isPlaying) {
+                    this.stopAnimations();
                     this.climbAnimation.play();
                 }
             }
@@ -93,6 +123,7 @@ function Player(x, y) {
             if (!this.playerSprite.body.allowGravity) {
                 this.playerSprite.body.velocity.y = this.speed; // Move down
                 if (!this.climbAnimation.isPlaying) {
+                    this.stopAnimations();
                     this.climbAnimation.play();
                 }
             }
@@ -101,10 +132,25 @@ function Player(x, y) {
 
     this.playerUpdate = function () {
         // Update
+        if (this.leftKey === false && this.rightKey === false) {
+            this.walkAnimation.stop();
+        }
+        if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying &&
+            !this.idleAnimation.isPlaying && !this.climbAnimation.isPlaying) {
+            this.stopAnimations();
+            this.idleAnimation.play();
+        }
     }
 
     this.setGravity = function(gravity) {
         // Gravity set-er
         this.playerSprite.body.allowGravity = gravity;
+    }
+
+    this.stopAnimations = function() {
+        this.idleAnimation.stop();
+        this.walkAnimation.stop();
+        this.jumpAnimation.stop();
+        this.climbAnimation.stop();
     }
 }

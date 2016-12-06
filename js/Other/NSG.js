@@ -51,21 +51,23 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Ga
 function preload() {
     if (window.screen.availHeight < GAMEHEIGHT || window.screen.availWidth < GAMEWIDTH) {
         // Adjust for smaller screens
-        GAMEHEIGHT = GAMEHEIGHT/2;
-        GAMEWIDTH = GAMEWIDTH/2;
+        //GAMEHEIGHT = GAMEHEIGHT/2;
+        //GAMEWIDTH = GAMEWIDTH/2;
         // Need to scale down somehow...?
     }
     console.log('Phaser Version: ' + Phaser.VERSION);
     console.log('B3 Version: ' + b3.VERSION);
     // Start state
     gameState = gameStates.MENU;
-    // Images
-    //game.load.image('player', 'assets/images/TestImages/player.png');
+    // XML Files
+    game.load.atlasXML('player', 'assets/images/Player/playerSpriteSheet.png', 'assets/images/Player/playerSpriteSheet.xml');
     game.load.image('enemy', 'assets/images/TestImages/enemy.png');
+    // Images
     game.load.image('floor', 'assets/images/TestImages/floor.png');
     game.load.image('light', 'assets/images/TestImages/light.png');
     game.load.image('stairs', 'assets/images/TestImages/stairs.png');
     game.load.image('exit', 'assets/images/TestImages/exit.png');
+    // Buttons
     game.load.image('leftArrow', 'assets/images/Buttons/ArrowLeft.png');
     game.load.image('rightArrow', 'assets/images/Buttons/ArrowRight.png');
     game.load.image('downArrow', 'assets/images/Buttons/ArrowDown.png');
@@ -74,8 +76,6 @@ function preload() {
     game.load.spritesheet('buttonPlay', 'assets/images/Buttons/buttonPlay.png', 194, 66);
     game.load.spritesheet('buttonHighscore', 'assets/images/Buttons/buttonHighscore.png', 194, 66);
     game.load.spritesheet('buttonBack', 'assets/images/Buttons/buttonBack.png', 194, 66);
-    // Other
-    game.load.atlasXML('player', 'assets/images/Player/playerSpriteSheet.png', 'assets/images/Player/playerSpriteSheetTest.xml');
     // Audio
     game.load.audio('background1', 'assets/sounds/background_eerie.mp3');
     game.load.audio('yell', 'assets/sounds/yell_hey.wav');
@@ -109,7 +109,7 @@ function create() {
             game.physics.arcade.gravity.y = 350;
             timer = game.time.create(false);
 
-            level = 1; // Reset level for every create!
+            level = 2; // Reset level for every create!
             var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
             for(i = 0; i < text.length; i++) {
                 text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
