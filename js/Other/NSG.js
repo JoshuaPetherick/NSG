@@ -59,33 +59,36 @@ function preload() {
     console.log('B3 Version: ' + b3.VERSION);
     // Start state
     gameState = gameStates.MENU;
+    var ASSETPATH = 'assets/images/';
+    var SOUNDPATH = 'assets/sounds/';
+    var TREEPATH = 'assets/behaviourTrees/';
     // XML Files
-    game.load.atlasXML('player', 'assets/images/Player/playerSpriteSheet.png', 'assets/images/Player/playerSpriteSheet.xml');
-    game.load.image('enemy', 'assets/images/TestImages/enemy.png');
+    game.load.atlasXML('player', ASSETPATH + 'Player/playerSpriteSheet.png', ASSETPATH + 'Player/playerSpriteSheet.xml');
+    game.load.image('enemy', ASSETPATH + 'TestImages/enemy.png');
     // Images
-    game.load.image('floor', 'assets/images/TestImages/floor.png');
-    game.load.image('light', 'assets/images/TestImages/light.png');
-    game.load.image('stairs', 'assets/images/TestImages/stairs.png');
-    game.load.image('exit', 'assets/images/TestImages/exit.png');
+    game.load.image('floor', ASSETPATH + 'TestImages/floor.png');
+    game.load.image('light', ASSETPATH + 'TestImages/light.png');
+    game.load.image('stairs', ASSETPATH + 'TestImages/stairs.png');
+    game.load.image('exit', ASSETPATH + 'TestImages/exit.png');
     // Buttons
-    game.load.image('leftArrow', 'assets/images/Buttons/ArrowLeft.png');
-    game.load.image('rightArrow', 'assets/images/Buttons/ArrowRight.png');
-    game.load.image('downArrow', 'assets/images/Buttons/ArrowDown.png');
-    game.load.image('upArrow', 'assets/images/Buttons/ArrowUp.png');
+    game.load.image('leftArrow', ASSETPATH + 'Buttons/ArrowLeft.png');
+    game.load.image('rightArrow', ASSETPATH + 'Buttons/ArrowRight.png');
+    game.load.image('downArrow', ASSETPATH + 'Buttons/ArrowDown.png');
+    game.load.image('upArrow', ASSETPATH + 'Buttons/ArrowUp.png');
     // Spritesheets
-    game.load.spritesheet('buttonPlay', 'assets/images/Buttons/buttonPlay.png', 194, 66);
-    game.load.spritesheet('buttonHighscore', 'assets/images/Buttons/buttonHighscore.png', 194, 66);
-    game.load.spritesheet('buttonBack', 'assets/images/Buttons/buttonBack.png', 194, 66);
+    game.load.spritesheet('buttonPlay', ASSETPATH + 'Buttons/buttonPlay.png', 194, 66);
+    game.load.spritesheet('buttonHighscore', ASSETPATH + 'Buttons/buttonHighscore.png', 194, 66);
+    game.load.spritesheet('buttonBack', ASSETPATH + 'Buttons/buttonBack.png', 194, 66);
     // Audio
-    game.load.audio('background1', 'assets/sounds/background_eerie.mp3');
-    game.load.audio('yell', 'assets/sounds/yell_hey.wav');
+    game.load.audio('background1', SOUNDPATH + 'background_eerie.mp3');
+    game.load.audio('yell', SOUNDPATH + 'yell_hey.wav');
     // Text
     var maxLvls = 15;
     for (var i = 1; i <= maxLvls; i++) {
         // Load all level text files!
         game.load.text('level' + i, 'assets/levels/lvl' + i + '.txt')
     }
-    game.load.text('AITree', 'assets/behaviourTrees/aiTree.json');
+    game.load.text('AITree', TREEPATH + 'aiTree.json');
 } //preload();
 
 function create() {
@@ -262,10 +265,10 @@ function handleCollision () {
     }
     if (game.physics.arcade.overlap(player.playerSprite, lightLayer)) {
         // If overlapping with LIGHT then change state
-        player.state = player.playerStates.LIGHT;
+        player.updateState(player.playerStates.LIGHT);
     }
     else {
-        player.state = player.playerStates.DARK;
+        player.updateState(player.playerStates.DARK);
     }
     if (game.physics.arcade.overlap(player.playerSprite, stairLayer)) {
         // If overlapping with STAIR then no gravity, so can climb up/down

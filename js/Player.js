@@ -153,4 +153,16 @@ function Player(x, y) {
         this.jumpAnimation.stop();
         this.climbAnimation.stop();
     }
+
+    this.updateState = function(state) {
+        // http://www.html5gamedevs.com/topic/3003-sprite-transparency/
+        if (state === this.playerStates.LIGHT) {
+            this.state = this.playerStates.LIGHT;
+            this.playerSprite.alpha = 1;
+        }
+        else if (state === this.playerStates.DARK) {
+            this.state = this.playerStates.DARK;
+            this.playerSprite.alpha = 0.5;
+        }
+    }
 }
