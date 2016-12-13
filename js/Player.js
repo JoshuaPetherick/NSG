@@ -19,7 +19,7 @@ function Player(x, y) {
     this.idleAnimation.speed = 20
 
     this.walkAnimation = this.playerSprite.animations.add('Walk', Phaser.Animation.generateFrameNames('Run_', 0, 9, '', 3));
-    this.walkAnimation.speed = 10;
+    this.walkAnimation.speed = 20;
 
     this.jumpAnimation = this.playerSprite.animations.add('Jump', Phaser.Animation.generateFrameNames('Jump_', 0, 9, '', 3));
     this.jumpAnimation.speed = 10;
@@ -27,7 +27,8 @@ function Player(x, y) {
     this.climbAnimation = this.playerSprite.animations.add('Climb', Phaser.Animation.generateFrameNames('Climb_', 0, 9, '', 3));
     this.climbAnimation.speed = 10;
 
-    this.deathAnimation = this.playerSprite.animations.add('Death', Phaser.Animation.generateFrameNames('Dead_', 0, 9, '', 3));
+    this.steps = new sound('steps');
+    this.steps.musicVol(2.0);
 
     // Handle button input
     this.leftKey = false;
@@ -100,7 +101,9 @@ function Player(x, y) {
                 }
                 this.stopAnimations();
                 this.walkAnimation.play();
+                this.steps.musicLoop();
             }
+
         }
         if (this.rightKey) {
             this.playerSprite.body.velocity.x = this.speed; // Move right
@@ -112,7 +115,9 @@ function Player(x, y) {
                 }
                 this.stopAnimations();
                 this.walkAnimation.play();
+                this.steps.musicLoop();
             }
+
         }
         if (this.upKey) {
             if (!this.playerSprite.body.allowGravity) {
@@ -157,6 +162,7 @@ function Player(x, y) {
         this.walkAnimation.stop();
         this.jumpAnimation.stop();
         this.climbAnimation.stop();
+        this.steps.musicStop();
     }
 
     this.updateState = function(state) {

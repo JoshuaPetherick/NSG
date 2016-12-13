@@ -1,1 +1,7 @@
 All sound files from "www.freesound.org"
+
+
+BG1 	= Ambient electronic loop 001 By frankumjay
+BG2 	= Mike TheTunk Woloszyn" ore "Mike Woloszyn" and ore www.Senproductions.de
+Robot 	= Mudkip2016 robot requested By kennysvoice
+Steps 	= Footsteps on an interior wooden floor By ftpalad

@@ -20,7 +20,8 @@ function Enemy(x, y) {
     this.climbAnimation = this.enemySprite.animations.add('Climb', Phaser.Animation.generateFrameNames('Climb_', 0, 4, '', 3));
     this.climbAnimation.speed = 10;
 
-    this.yell = new sound('yell');
+    this.yell = new sound('alert');
+    this.yell.musicVol(0.75);
 
     this.enemyStates = {
         LEFT: 0,

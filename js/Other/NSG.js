@@ -85,7 +85,9 @@ function preload() {
     game.load.spritesheet('buttonBack', ASSETPATH + 'Buttons/buttonBack.png', 194, 66);
     // Audio
     game.load.audio('background1', SOUNDPATH + 'background_eerie.mp3');
-    game.load.audio('yell', SOUNDPATH + 'yell_hey.wav');
+    game.load.audio('background2', SOUNDPATH + 'background_epic.wav');
+    game.load.audio('steps', SOUNDPATH + 'steps.wav');
+    game.load.audio('alert', SOUNDPATH + 'robot_intruder.wav');
     // Text
     var maxLvls = 15;
     for (var i = 1; i <= maxLvls; i++) {
@@ -134,12 +136,13 @@ function create() {
             newLevel = new Signal();
             getIntel = new Signal();
 
-            newLevel.addSignal(nextLevel)
+            newLevel.addSignal(nextLevel);
             getIntel.addSignal (function() {
                 exit = new Exit(player.origX, player.origY);
-            })
+                backgroundMusic.queueSong('background2');
+            });
 
-            level = 10; // Reset level for every create!
+            level = 1; // Reset level for every create!
             var text = prepLevel();
             loadLevel(text);
 
@@ -162,6 +165,7 @@ function update() {
             for(e in enemies) {
                 enemies[e].enemyUpdate(); // Update enemy AI, collision, etc
             }
+            backgroundMusic.musicUpdate();
             break;
     }
 } // update()
@@ -267,10 +271,6 @@ function sortTimer(time) {
 
 function handleCollision () {
     game.physics.arcade.collide(player.playerSprite, wallLayer); // Checks if player is colliding with Walls
-    if (game.physics.arcade.overlap(player.playerSprite, exitLayer)) {
-        // Check if player has collidied with exit, if so progress to next level
-        newLevel.call();
-    }
     for (e in enemies) {
         if (game.physics.arcade.overlap(player.playerSprite, enemies[e].enemySprite)) {
             // For each enemy, check if overlapping, if so then reset level
@@ -296,6 +296,10 @@ function handleCollision () {
             getIntel.call();
         }
     }
+    if (game.physics.arcade.overlap(player.playerSprite, exitLayer)) {
+        // Check if player has collidied with exit, if so progress to next level
+        newLevel.call();
+    }
 }
 
 function nextLevel() {
@@ -317,6 +321,7 @@ function nextLevel() {
         loadLevel(text);
     }
     else {
+        level = 1;
         gameComplete();
     }
 }
@@ -325,7 +330,7 @@ function gameComplete() {
     timer.pause(); // Pause
     localStorage.setItem('timerScore', sortTimer(timer.seconds)); // Store local time score for player
     timer.stop(); // Kill timer off
-
+    console.log('End...?');
     gameState = gameStates.SCORE;
     create();
 }

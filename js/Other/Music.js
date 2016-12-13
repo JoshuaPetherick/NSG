@@ -7,10 +7,17 @@ function sound(song) {
     // Init
     this.music = game.add.audio(song);
 
-    this.musicUpdate = function(song) {
-        // Update song(?)
-        this.music.stop();
-        this.music = game.add.audio(song);
+    this.musicUpdate = function() {
+        if(!this.music.loop && !this.music.isPlaying) {
+            this.music = game.add.audio(this.nextSong);
+            this.musicLoop();
+        }
+    }
+
+    this.queueSong = function(song) {
+        this.nextSong = song;
+        this.music.loop = false;
+        this.music.fadeOut(5000);
     }
 
     this.musicPlay = function() {
