@@ -85,7 +85,7 @@ function Player(x, y) {
 
         if (game.physics.arcade.collide(player.playerSprite, background)) {
             if (this.upKey) {
-                this.playerSprite.body.velocity.y = -this.speed; // Jump up
+                this.playerSprite.body.velocity.y = -(this.speed+50); // Jump up
                 this.stopAnimations();
                 this.jumpAnimation.play();
             }
@@ -95,6 +95,7 @@ function Player(x, y) {
             if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying) {
                 if (this.playerSprite.width > 0) { // Flip image vertically (Face Left)
                     this.playerSprite.scale.x *= -1;
+                    this.playerSprite.x -= this.playerSprite.width; // Prevents position from changing after flip
                 }
                 this.stopAnimations();
                 this.walkAnimation.play();
@@ -105,6 +106,7 @@ function Player(x, y) {
             if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying) {
                 if (this.playerSprite.width < 0) { // Flip image vertically (Face Right)
                     this.playerSprite.scale.x *= -1;
+                    this.playerSprite.x -= this.playerSprite.width; // Prevents position from changing after flip
                 }
                 this.stopAnimations();
                 this.walkAnimation.play();

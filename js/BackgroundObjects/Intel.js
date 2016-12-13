@@ -1,6 +1,6 @@
 
 function Intel(x, y) {
-    this.intelSprite = game.add.sprite(x, y, 'floor');
+    this.intelSprite = game.add.sprite(x, y, 'intel');
     this.intelSprite.width = TileSizeX;
     this.intelSprite.height = TileSizeY;
 

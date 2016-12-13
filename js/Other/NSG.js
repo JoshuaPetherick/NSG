@@ -6,7 +6,7 @@
 var GAMEHEIGHT = 600;
 var GAMEWIDTH = 900;
 var backgroundMusic;
-var level;
+var level = 1;
 var timer;
 
 // Phaser draw groups
@@ -16,6 +16,7 @@ var lightLayer;
 var stairLayer;
 var foreground;
 var exitLayer;
+var TILEBACKGROUND;
 
 // Tile Info
 var TileSizeX;
@@ -66,10 +67,12 @@ function preload() {
     game.load.atlasXML('player', ASSETPATH + 'Player/playerSpriteSheet.png', ASSETPATH + 'Player/playerSpriteSheet.xml');
     game.load.image('enemy', ASSETPATH + 'TestImages/enemy.png');
     // Images
-    game.load.image('floor', ASSETPATH + 'TestImages/floor.png');
+    game.load.image('background', ASSETPATH + 'Background/BGTile.png');
+    game.load.image('floor', ASSETPATH + 'Background/Floor.png');
     game.load.image('light', ASSETPATH + 'TestImages/light.png');
-    game.load.image('stairs', ASSETPATH + 'TestImages/stairs.png');
-    game.load.image('exit', ASSETPATH + 'TestImages/exit.png');
+    game.load.image('stairs', ASSETPATH + 'Background/Ladder.png');
+    game.load.image('exit', ASSETPATH + 'Background/Door.png');
+    game.load.image('intel', ASSETPATH + 'Background/Intel.png');
     // Buttons
     game.load.image('leftArrow', ASSETPATH + 'Buttons/ArrowLeft.png');
     game.load.image('rightArrow', ASSETPATH + 'Buttons/ArrowRight.png');
@@ -89,6 +92,16 @@ function preload() {
         game.load.text('level' + i, 'assets/levels/lvl' + i + '.txt')
     }
     game.load.text('AITree', TREEPATH + 'aiTree.json');
+    // Init Groups
+    TILEBACKGROUND = game.add.group();
+    background = game.add.group();
+    wallLayer = game.add.group();
+    lightLayer = game.add.group();
+    stairLayer = game.add.group();
+    exitLayer = game.add.group();
+    foreground = game.add.group();
+    // Used for FPS counter
+    game.time.advancedTiming = true;
 } //preload();
 
 function create() {
@@ -96,8 +109,12 @@ function create() {
     switch(gameState)
     {
         case gameStates.MENU:
-            game.time.advancedTiming = true; // Used for FPS counter
-            background = game.add.group();
+            // Load game background!
+            var text = prepLevel();
+
+            TileSizeY = Math.round(GAMEHEIGHT/text.length);
+            TileSizeX = Math.round(GAMEWIDTH/(text[0].length));
+            loadLevel(text); // Will only load the background!
 
             buttons.push(new button("PLAY"));
             buttons.push(new button("HIGHSCORE"));
@@ -112,31 +129,17 @@ function create() {
             game.physics.arcade.gravity.y = 350;
             timer = game.time.create(false);
 
-            level = 2; // Reset level for every create!
-            var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
-            for(i = 0; i < text.length; i++) {
-                text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
-            }
-
-            TileSizeY = Math.round(GAMEHEIGHT/text.length);
-            TileSizeX = Math.round(GAMEWIDTH/(text[0].length));
-
-            wallLayer = game.add.group();
-            lightLayer = game.add.group();
-            stairLayer = game.add.group();
-            exitLayer = game.add.group();
-            foreground = game.add.group();
-
             playerDied = new Signal();
-
             newLevel = new Signal();
-            newLevel.addSignal(nextLevel)
-
             getIntel = new Signal();
+
+            newLevel.addSignal(nextLevel)
             getIntel.addSignal (function() {
                 exit = new Exit(player.origX, player.origY);
             })
 
+            level = 1; // Reset level for every create!
+            var text = prepLevel();
             loadLevel(text);
 
             backgroundMusic = new sound('background1'); // Background music, open to update
@@ -186,56 +189,65 @@ function loadLevel(text) {
             // Initialise based on character in txt file
             var x = (j*TileSizeX); // X based on position in txt file
             var y = (i*TileSizeY); // Y based on position in txt file
-            switch (text[i].charAt(j)) {
-                // Optimise the below: Maybe merge into a function (Reads file and returns x&y position)
-                case "P":
-                    player = new Player(x, y);
-                    break;
-
-                case "G":
-                    enemies.push(new Enemy((j*TileSizeX), (i*TileSizeY))); // Add new to Array
-                    break;
-
-                case "F":
-                    new Floor(x, y); // Add new to Array
-                    break;
-
-                case "W":
-                    new Wall(x, y); // Add new to Array
-                    break;
-
-                case "S":
-                    new Stair(x, y); // Add new to Array
-                    break;
-
-                case "L":
-                    new Light(x, y); // Add new to Array
-                    break;
-
-                case "X":
-                    enemies.push(new Enemy(x, y)); // Add new to Array
-                    new Light(x, y); // Add new to Array
-                    break;
-
-                case "Y":
-                    player = new Player(x, y);
-                    new Stair(x, y); // Add new to Array
-                    break;
-
-                case "Z":
-                    player = new Player(x, y);
-                    new Light(x, y); // Add new to Array
-                    break;
-
-                case "I":
-                    intel = new Intel(x, y);
-                    break;
-
-                case "E":
-                    exit = new Exit(x, y);
-                    break;
+            // Designed so will only load background when in MENU state
+            if (gameState === gameStates.MENU) {
+                new BGTile(x, y);
+            }
+            else {
+                addObject(text[i].charAt(j), x, y);
             }
         }
+    }
+}
+
+function addObject (char, x, y) {
+    switch (char) {
+        case "P":
+            player = new Player(x, y);
+            break;
+
+        case "G":
+            enemies.push(new Enemy(x, y)); // Add new to Array
+            break;
+
+        case "F":
+            new Floor(x, y); // Add new to Array
+            break;
+
+        case "W":
+            new Wall(x, y); // Add new to Array
+            break;
+
+        case "S":
+            new Stair(x, y); // Add new to Array
+            break;
+
+        case "L":
+            new Light(x, y); // Add new to Array
+            break;
+
+        case "X":
+            enemies.push(new Enemy(x, y)); // Add new to Array
+            new Light(x, y); // Add new to Array
+            break;
+
+        case "Y":
+            player = new Player(x, y);
+            new Stair(x, y); // Add new to Array
+            break;
+
+        case "Z":
+            player = new Player(x, y);
+            new Light(x, y); // Add new to Array
+            break;
+
+        case "I":
+            intel = new Intel(x, y);
+            break;
+
+        case "E":
+            exit = new Exit(x, y);
+            break;
     }
 }
 
@@ -299,10 +311,7 @@ function nextLevel() {
     // Load next level
     level++;
     if (level < 16 ) {
-        var text = game.cache.getText('level' + level).split('\n'); // Stores it as an array
-        for(i = 0; i < text.length; i++) {
-            text[i] = text[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
-        }
+        var text = prepLevel();
         loadLevel(text);
     }
     else {
@@ -317,4 +326,12 @@ function gameComplete() {
 
     gameState = gameStates.SCORE;
     create();
+}
+
+function prepLevel() {
+    var txt = game.cache.getText('level' + level).split('\n'); // Stores it as an array
+    for(i = 0; i < txt.length; i++) {
+        txt[i] = txt[i].replace(/\n|\r/g, ""); // Cleans up Line breaks
+    }
+    return txt;
 }
