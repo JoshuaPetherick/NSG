@@ -50,7 +50,7 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Ga
 });
 
 function preload() {
-    if (window.screen.availHeight > GAMEHEIGHT || window.screen.availWidth > GAMEWIDTH) {
+    if (window.screen.availHeight > (GAMEHEIGHT*2) && window.screen.availWidth > (GAMEWIDTH*2)) {
         // Adjust for bigger screens
         GAMEHEIGHT = GAMEHEIGHT*2;
         GAMEWIDTH = GAMEWIDTH*2;
