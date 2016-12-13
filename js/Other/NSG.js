@@ -3,8 +3,8 @@
 // Last Updated: 05/12/2016
 
 // Core-game variables
-var GAMEHEIGHT = 600;
-var GAMEWIDTH = 900;
+var GAMEHEIGHT = 300;
+var GAMEWIDTH = 450;
 var backgroundMusic;
 var level = 1;
 var timer;
@@ -50,11 +50,11 @@ var game = new Phaser.Game(GAMEWIDTH, GAMEHEIGHT, Phaser.AUTO, 'Ninja Stealth Ga
 });
 
 function preload() {
-    if (window.screen.availHeight < GAMEHEIGHT || window.screen.availWidth < GAMEWIDTH) {
-        // Adjust for smaller screens
-        //GAMEHEIGHT = GAMEHEIGHT/2;
-        //GAMEWIDTH = GAMEWIDTH/2;
-        // Need to scale down somehow...?
+    if (window.screen.availHeight > GAMEHEIGHT || window.screen.availWidth > GAMEWIDTH) {
+        // Adjust for bigger screens
+        GAMEHEIGHT = GAMEHEIGHT*2;
+        GAMEWIDTH = GAMEWIDTH*2;
+        game.scale.setGameSize(GAMEWIDTH, GAMEHEIGHT)
     }
     console.log('Phaser Version: ' + Phaser.VERSION);
     console.log('B3 Version: ' + b3.VERSION);
