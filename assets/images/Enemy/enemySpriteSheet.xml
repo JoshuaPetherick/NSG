@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="playerSpriteSheet.png">
+	<!-- Created with Adobe Flash Professional version 14.1.0.96 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="Climb_000" x="0" y="0" width="567" height="556" frameX="-1" frameY="-5" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Climb_001" x="568" y="0" width="567" height="556" frameX="-1" frameY="-5" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Climb_002" x="1136" y="0" width="567" height="556" frameX="-1" frameY="-5" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Climb_003" x="0" y="557" width="567" height="556" frameX="-1" frameY="-5" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Climb_004" x="2304" y="1892" width="567" height="556" frameX="-1" frameY="-5" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_000" x="2840" y="0" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_001" x="2272" y="1114" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_002" x="2840" y="557" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_003" x="2840" y="1114" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_004" x="0" y="1671" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_005" x="0" y="2228" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_006" x="568" y="1671" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_007" x="0" y="2785" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_008" x="568" y="2228" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Jump_009" x="1136" y="1671" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Run_000" x="568" y="2785" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Run_001" x="1136" y="2228" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Run_002" x="1704" y="1671" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Run_003" x="1136" y="2785" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Run_004" x="1704" y="2228" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Run_005" x="2272" y="1671" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Run_006" x="1704" y="2785" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+	<SubTexture name="Run_007" x="2272" y="2228" width="567" height="556" frameX="-28" frameY="-46" frameWidth="567" frameHeight="556"/>
+</TextureAtlas>
