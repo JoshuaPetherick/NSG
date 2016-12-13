@@ -1,8 +1,8 @@
 
 function Intel(x, y) {
-    this.intelSprite = game.add.sprite(x, y, 'intel');
-    this.intelSprite.width = TileSizeX;
-    this.intelSprite.height = TileSizeY;
+    this.intelSprite = game.add.sprite(x, (y+(TileSizeY/2)), 'intel');
+    this.intelSprite.width = (TileSizeX/2);
+    this.intelSprite.height = (TileSizeY/2);
 
     game.physics.enable(this.intelSprite, Phaser.Physics.ARCADE);
     this.intelSprite.body.allowGravity = false;

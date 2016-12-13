@@ -14,6 +14,12 @@ function Enemy(x, y) {
 
     foreground.add(this.enemySprite);
 
+    this.walkAnimation = this.enemySprite.animations.add('Walk', Phaser.Animation.generateFrameNames('Run_', 0, 7, '', 3));
+    this.walkAnimation.speed = 10;
+
+    this.climbAnimation = this.enemySprite.animations.add('Climb', Phaser.Animation.generateFrameNames('Climb_', 0, 4, '', 3));
+    this.climbAnimation.speed = 10;
+
     this.yell = new sound('yell');
 
     this.enemyStates = {
@@ -55,9 +61,15 @@ function Enemy(x, y) {
 
     this.resetPos = function() {
         this.state = this.enemyStates.RIGHT;
+        this.enemySprite.body.allowGravity = false;
         this.enemySprite.x = this.origX;
         this.enemySprite.y = this.origY;
         this.speed = this.baseSpeed;
+    }
+
+    this.stopAnimations = function() {
+        this.walkAnimation.stop();
+        this.climbAnimation.stop();
     }
 
     playerDied.addSignal(function() {

@@ -2,7 +2,7 @@
 -S----------
 -S----------
 -S----------
-FFFFWFFFFFSF
+FFFFFFFFFFSF
 ----W-L-W-S-
 P---WLLLW-S-
 FFS-WLLLW-S-

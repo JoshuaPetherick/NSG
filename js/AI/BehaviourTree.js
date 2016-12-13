@@ -1,4 +1,4 @@
-// Inspired by and based off code at: https://github.com/efbenson/behavior3Test
+// Based off code at: https://github.com/efbenson/behavior3Test
 // Using library behavior3js from: http://behavior3js.guineashots.com/
 var tree = {};
 
@@ -25,9 +25,21 @@ function AITree(enemy) {
                 // Handles moving Left & Right
                 if (player.playerSprite.x < enemy.enemySprite.x ) {
                     enemy.enemySprite.body.velocity.x = -enemy.speed;
+                    if (enemy.enemySprite.width > 0) { // Flip image vertically (Face Left)
+                        enemy.enemySprite.scale.x *= -1;
+                        enemy.enemySprite.x -= enemy.enemySprite.width; // Prevents position from changing after flip
+                    }
                 }
                 else if (player.playerSprite.x > enemy.enemySprite.x) {
                     enemy.enemySprite.body.velocity.x = enemy.speed;
+                    if (enemy.enemySprite.width < 0) { // Flip image vertically (Face Right)
+                        enemy.enemySprite.scale.x *= -1;
+                        enemy.enemySprite.x -= enemy.enemySprite.width; // Prevents position from changing after flip
+                    }
+                }
+                if (!enemy.walkAnimation.isPlaying && !enemy.climbAnimation.isPlaying) {
+                    enemy.stopAnimations();
+                    enemy.walkAnimation.play();
                 }
                 // Handles moving Up or Down
                 if (player.playerSprite.y != enemy.enemySprite.y) {
@@ -39,6 +51,14 @@ function AITree(enemy) {
                         else {
                             enemy.enemySprite.body.velocity.y = enemy.speed/2; // Move at half speed
                         }
+                        if (!enemy.climbAnimation.isPlaying) {
+                            enemy.stopAnimations();
+                            enemy.climbAnimation.play();
+                        }
+                    }
+                    if (!enemy.walkAnimation.isPlaying && !enemy.climbAnimation.isPlaying) {
+                        enemy.stopAnimations();
+                        enemy.walkAnimation.play();
                     }
                 }
                 return b3.SUCCESS;
@@ -49,15 +69,28 @@ function AITree(enemy) {
                 var enemy = tick.blackboard.get('pointer');
                 if(enemy.state === enemy.enemyStates.LEFT) {
                     enemy.enemySprite.body.velocity.x = -enemy.speed;
-                    if (enemy.enemySprite.x < 0 ) {
+                    if (enemy.enemySprite.width > 0) { // Flip image vertically (Face Left)
+                        enemy.enemySprite.scale.x *= -1;
+                        enemy.enemySprite.x -= enemy.enemySprite.width; // Prevents position from changing after flip
+                    }
+                    if (enemy.enemySprite.x <= (0 - enemy.enemySprite.width) ) {
+                        // Needs to be minus as width becomes negative when flipped
                         enemy.state = enemy.enemyStates.RIGHT;
                     }
                 }
                 else {
                     enemy.enemySprite.body.velocity.x = enemy.speed;
-                    if (enemy.enemySprite.x > (GAMEWIDTH - enemy.enemySprite.width)) {
+                    if (enemy.enemySprite.width < 0) { // Flip image vertically (Face Right)
+                        enemy.enemySprite.scale.x *= -1;
+                        enemy.enemySprite.x -= enemy.enemySprite.width; // Prevents position from changing after flip
+                    }
+                    if (enemy.enemySprite.x >= (GAMEWIDTH - enemy.enemySprite.width)) {
                         enemy.state = enemy.enemyStates.LEFT;
                     }
+                }
+                if (!enemy.walkAnimation.isPlaying) {
+                    enemy.stopAnimations();
+                    enemy.walkAnimation.play();
                 }
                 return b3.SUCCESS;
             }
@@ -82,7 +115,7 @@ function AITree(enemy) {
                         && player.playerSprite.x <= enemy.enemySprite.x
                         && player.playerSprite.y === enemy.enemySprite.y) {
                         enemy.state = enemy.enemyStates.CHASING;
-                        enemy.speed = enemy.baseSpeed*2;
+                        enemy.speed = enemy.baseSpeed+50;
                         enemy.yell.musicPlay();
                         return b3.SUCCESS;
                     }
@@ -92,7 +125,7 @@ function AITree(enemy) {
                         && player.playerSprite.x >= enemy.enemySprite.x
                         && player.playerSprite.y === enemy.enemySprite.y) {
                         enemy.state = enemy.enemyStates.CHASING;
-                        enemy.speed = enemy.baseSpeed*2;
+                        enemy.speed = enemy.baseSpeed+50;
                         enemy.yell.musicPlay();
                         return b3.SUCCESS;
                     }

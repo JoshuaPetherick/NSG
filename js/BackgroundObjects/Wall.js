@@ -1,6 +1,6 @@
 
 function Wall(x, y) {
-    this.wallSprite = game.add.sprite(x, y, 'floor');
+    this.wallSprite = game.add.sprite(x, y, 'wall');
     this.wallSprite.width = TileSizeX;
     this.wallSprite.height = TileSizeY;
 

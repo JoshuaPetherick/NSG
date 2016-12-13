@@ -92,7 +92,8 @@ function Player(x, y) {
         }
         if (this.leftKey) {
             this.playerSprite.body.velocity.x = -this.speed; // Move left
-            if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying) {
+            if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying
+                && this.playerSprite.body.allowGravity === true) {
                 if (this.playerSprite.width > 0) { // Flip image vertically (Face Left)
                     this.playerSprite.scale.x *= -1;
                     this.playerSprite.x -= this.playerSprite.width; // Prevents position from changing after flip
@@ -103,7 +104,8 @@ function Player(x, y) {
         }
         if (this.rightKey) {
             this.playerSprite.body.velocity.x = this.speed; // Move right
-            if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying) {
+            if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying
+                && this.playerSprite.body.allowGravity === true) {
                 if (this.playerSprite.width < 0) { // Flip image vertically (Face Right)
                     this.playerSprite.scale.x *= -1;
                     this.playerSprite.x -= this.playerSprite.width; // Prevents position from changing after flip
@@ -138,7 +140,8 @@ function Player(x, y) {
             this.walkAnimation.stop();
         }
         if (!this.walkAnimation.isPlaying && !this.jumpAnimation.isPlaying &&
-            !this.idleAnimation.isPlaying && !this.climbAnimation.isPlaying) {
+            !this.idleAnimation.isPlaying && !this.climbAnimation.isPlaying &&
+            this.playerSprite.body.allowGravity === true) {
             this.stopAnimations();
             this.idleAnimation.play();
         }

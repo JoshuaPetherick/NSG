@@ -65,10 +65,11 @@ function preload() {
     var TREEPATH = 'assets/behaviourTrees/';
     // XML Files
     game.load.atlasXML('player', ASSETPATH + 'Player/playerSpriteSheet.png', ASSETPATH + 'Player/playerSpriteSheet.xml');
-    game.load.image('enemy', ASSETPATH + 'TestImages/enemy.png');
+    game.load.atlasXML('enemy', ASSETPATH + 'Enemy/enemySpriteSheet.png', ASSETPATH + 'Enemy/enemySpriteSheet.xml');
     // Images
     game.load.image('background', ASSETPATH + 'Background/BGTile.png');
     game.load.image('floor', ASSETPATH + 'Background/Floor.png');
+    game.load.image('wall', ASSETPATH + 'Background/Wall.png');
     game.load.image('light', ASSETPATH + 'TestImages/light.png');
     game.load.image('stairs', ASSETPATH + 'Background/Ladder.png');
     game.load.image('exit', ASSETPATH + 'Background/Door.png');
@@ -138,7 +139,7 @@ function create() {
                 exit = new Exit(player.origX, player.origY);
             })
 
-            level = 1; // Reset level for every create!
+            level = 10; // Reset level for every create!
             var text = prepLevel();
             loadLevel(text);
 
@@ -243,6 +244,7 @@ function addObject (char, x, y) {
 
         case "I":
             intel = new Intel(x, y);
+            new Light(x, y); // Add new to Array
             break;
 
         case "E":
