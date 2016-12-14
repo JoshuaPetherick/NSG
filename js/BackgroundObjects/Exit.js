@@ -8,9 +8,4 @@ function Exit(x, y) {
     this.exitSprite.body.allowGravity = false;
     this.exitSprite.body.immovable = true;
     exitLayer.add(this.exitSprite);
-
-    this.exitCollision = function () {
-        // Load new level!
-        nextLevel();
-    }
 }

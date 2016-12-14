@@ -10,9 +10,3 @@ function Signal() {
         this.signal.dispatch();
     }
 }
-
-function gotTheIntel() {
-    // Update when intel has been taken
-    exit = new Exit(this.origX, this.origY); //Add escape route!
-    // Update Enemy Speed
-}

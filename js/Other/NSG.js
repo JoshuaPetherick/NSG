@@ -1,6 +1,6 @@
 // Designed and Created by: Joshua Petherick
 // Project started on: 24/10/2016
-// Last Updated: 05/12/2016
+// Last Updated: 14/12/2016
 
 // Core-game variables
 var GAMEHEIGHT = 300;
@@ -321,7 +321,6 @@ function nextLevel() {
         loadLevel(text);
     }
     else {
-        level = 1;
         gameComplete();
     }
 }
@@ -330,7 +329,6 @@ function gameComplete() {
     timer.pause(); // Pause
     localStorage.setItem('timerScore', sortTimer(timer.seconds)); // Store local time score for player
     timer.stop(); // Kill timer off
-    console.log('End...?');
     gameState = gameStates.SCORE;
     create();
 }

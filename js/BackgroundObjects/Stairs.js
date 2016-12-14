@@ -9,9 +9,4 @@ function Stair(x, y) {
     this.stairSprite.body.gravity.y = 0;
     this.stairSprite.body.immovable = true;
     stairLayer.add(this.stairSprite);
-
-    this.stairCollision = function () {
-        // Turn player gravity off!
-        player.setGravity(false);
-    }
 }
