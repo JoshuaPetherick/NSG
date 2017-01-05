@@ -327,7 +327,9 @@ function nextLevel() {
 
 function gameComplete() {
     timer.pause(); // Pause
-    localStorage.setItem('timerScore', sortTimer(timer.seconds)); // Store local time score for player
+    if(!localStorage.getItem('timerScore') && localStorage.getItem('timerScore') > timer.seconds) {
+        localStorage.setItem('timerScore', sortTimer(timer.seconds)); // Store local time score for player
+    }
     timer.stop(); // Kill timer off
     gameState = gameStates.SCORE;
     create();
